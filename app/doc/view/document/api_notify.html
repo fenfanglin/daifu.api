@@ -1,0 +1,108 @@
+<div class="wiki-preview-body markdown-body">
+	<h2>异步通知</h2>
+	<h4>规则说明：</h4>
+	<p class="pl-4">
+		1、当用户完成支付，平台会通过商户下单时预留的回调连接notify_url，通知到下游商户，商户根椐订单完成后续的业务逻辑。<br>
+		2、只有已完成的订单才会回调，其他状态不会回调。<br>
+		3、如果回调成功，期望返回 “success” 字符串<span style="color:red">（订单处理过也返回“success”）</span>
+		。返回其他则表示回调失败，平台会再次回调给商户（最多回调10次，每隔10秒回调一次）。<br>
+		4、商户收到回调信息，需要进行验证签名，已保证信息安全。<br>
+		5、平台只负责对成功订单回调到商户预留地址，商户端应自行保证己方的数据安全，对于商户端逻辑漏洞平台概不负责。<br>
+	</p>
+	<h4>请求方式：</h4>
+	<div class="markdown-code-block">
+		<pre><code>提交方式：POST
+Content-Type：application/json</code></pre>
+	</div>
+	<h4>回调参数：</h4>
+	<table>
+		<thead>
+			<tr>
+				<th style="min-width: 200px;">参数名称</th>
+				<th style="min-width: 120px;">是否必填</th>
+				<th style="min-width: 150px;">字段类型</th>
+				<th style="min-width: 400px;">说明</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>mchid</td>
+				<td></td>
+				<td>numeric</td>
+				<td>商户编号</td>
+			</tr>
+			<tr>
+				<td>order_no</td>
+				<td></td>
+				<td>numeric</td>
+				<td>平台订单号</td>
+			</tr>
+			<tr>
+				<td>out_trade_no</td>
+				<td></td>
+				<td>string</td>
+				<td>商户订单号</td>
+			</tr>
+			<tr>
+				<td>amount</td>
+				<td></td>
+				<td>numeric</td>
+				<td>实付金额（元）</td>
+			</tr>
+			<tr>
+				<td>usdt_amount</td>
+				<td></td>
+				<td>string</td>
+				<td>实付金额（Usdt），Usdt通道才有</td>
+			</tr>
+			<tr>
+				<td>usdt_rate</td>
+				<td></td>
+				<td>string</td>
+				<td>Usdt汇率，Usdt通道才有</td>
+			</tr>
+			<tr>
+				<td>success_time</td>
+				<td></td>
+				<td>numeric</td>
+				<td>支付时间戳（秒），10位数</td>
+			</tr>
+			<tr>
+				<td>attach</td>
+				<td></td>
+				<td>string</td>
+				<td>下单时附加数据</td>
+			</tr>
+			<tr>
+				<td>remark</td>
+				<td></td>
+				<td>string</td>
+				<td>下单备注</td>
+			</tr>
+			<tr>
+				<td>pay_remark</td>
+				<td></td>
+				<td>string</td>
+				<td>支付备注</td>
+			</tr>
+			<tr>
+				<td>image_url</td>
+				<td></td>
+				<td>string</td>
+				<td>转账截图，建议商户根据链接保存到自己的服务器</td>
+			</tr>
+			<tr>
+				<td>status</td>
+				<td></td>
+				<td>string</td>
+				<td>NOTPAY：未支付；SUCCESS：已支付</td>
+			</tr>
+			<tr>
+				<td>sign</td>
+				<td></td>
+				<td>string</td>
+				<td>签名</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,54 @@
+<div class="wiki-preview-body markdown-body">
+	<h2>签名算法</h2>
+	<h4>规则说明：</h4>
+	<p class="pl-4">
+		1、参数名ASCII码从小到大排序（字典序）。<br />
+		2、参数以&符号连接。<br />
+		3、最后加上<span class="text-danger">key=商户密钥。</span><br />
+		4、全部拼接后以MD5运算，得到的字符串转换为大写。<br />
+	</p>
+	<h4>请求参数示例：</h4>
+	<div class="markdown-code-block">
+		<pre><code>mchid=xxxx
+code=xxxx
+out_trade_no=xxxx
+amount=xxxx
+notify_url=xxxx
+payer_name=xxxx
+attach=xxxx
+timestamp=xxxx</code></pre>
+	</div>
+	<h4>签名算法示例：</h4>
+	<div class="markdown-code-block">
+		<pre><code>sign = strtoupper(md5(amount=xxxx&amp;attach=xxxx&amp;code=xxxx&amp;mchid=xxxx&amp;notify_url=xxxx&amp;out_trade_no=xxxx&amp;payer_name=xxxx&amp;timestamp=xxxx&amp;<span class="text-danger">key=xxxx</span>))</code></pre>
+	</div>
+	<h4>参考：</h4>
+	<div class="markdown-code-block">
+		<pre><code>/**
+ * 生成签名函数
+ * $params: 接口请求参数/回调返回参数
+ * $secret_key: 商户密钥
+ */
+function createSign($params, $secret_key)
+{
+    unset($params['sign']); //删除sign参数
+    
+    ksort($params); //字典排序
+    
+    $str = '';
+    foreach ($params as $key => $value)
+    {
+        $str .= strtolower($key) . '=' . $value . '&';
+    }
+    
+    $str .= 'key=' . $secret_key; //加上商户密钥
+    
+    return strtoupper(md5($str));
+}</code></pre>
+	</div>
+</div>
+<style>
+	.wiki-preview-body {
+		max-width: 1500px;
+	}
+</style>

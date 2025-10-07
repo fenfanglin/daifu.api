@@ -1,0 +1,9 @@
+/.idea
+/.vscode
+/runtime
+*.log
+*.zip
+*.gz
+*.code-workspace
+*.env
+.user.ini

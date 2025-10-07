@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="language" content="en">
+<link rel="stylesheet" type="text/css" href="/template/document/css/bootstrap.css?v=1" />
+<link rel="stylesheet" type="text/css" href="/template/document/css/style.css?v=1" />
+<link rel="stylesheet" type="text/css" href="/template/document/css/markdown.css?v=1" />
+<script src="/template/document/js/jquery.js"></script>
+<script src="/template/document/js/bootstrap.js"></script>
+<title>JQKPAY平台接口文档</title>
+</head>
+<style>
+@media (min-width: 992px) {
+	.col-md-9 {
+		width: 1200px !important;
+	}
+}
+.row {
+	display: flex;
+	justify-content: center;
+}
+.wiki-preview-body {
+	max-width: 1200px;
+}
+.navbar-header {
+	float: unset;
+}
+.navbar-brand {
+	float: unset;
+	text-align: center;
+	color: #fff !important;
+}
+.footer {
+	text-align: center;
+}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+	background-color: #666;
+	border-color: #666;
+}
+.submenu a {
+	background: #fff;
+	border-radius: 0;
+}
+.submenu a:hover, .submenu a:active, .submenu a.active, .submenu a.active:hover, .submenu a.active:active {
+	background: #e7e7e7;
+	border-color: #ddd;
+	color: #555;
+}
+</style>
+<body>
+<div class="wrap">
+	<nav id="w92" class="navbar-inverse navbar-fixed-top navbar">
+		<div class="navbar-header">
+			<div class="navbar-brand">JQKPAY平台接口文档</div>
+		</div>
+	</nav>
+	<div class="row">
+		<div class="col-md-2">
+			<div id="navigation" class="list-group">
+				<a class="list-group-item" href="#navigation-76" data-toggle="collapse">
+					对接文档 <b class="caret"></b>
+				</a>
+				<div id="navigation-76" class="submenu panel-collapse collapse in">
+					<!-- <a class="list-group-item" href="/document2/api_create">统一下单</a> -->
+					<a class="list-group-item" href="/document2/api_notify">异步通知</a>
+					<!-- <a class="list-group-item" href="/document2/api_query">订单查询</a> -->
+					<a class="list-group-item" href="/document2/api_sign">签名算法</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 guide-content">
+			{include file="$include_file"/}
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
