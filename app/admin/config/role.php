@@ -190,6 +190,191 @@ return [
 				],
 			],
 		],
+		'channel' => [
+			'title' => '通道管理',
+			'icon' => 'icon-yingyongguanli',
+			'hidden' => false,
+			'children' => [
+				'list_all' => [
+					'title' => '三方通道管理',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel:list',
+						'channel:view',
+					],
+					'permission' => [
+						'channel:save:add' => '添加',
+						'channel:save:edit' => '编辑',
+						'channel:enable' => '启用',
+						'channel:disable' => '禁用',
+					],
+				],
+				/* 'list_system_bank' => [
+					'title' => '系统银行卡',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'system_bank:list',
+						'system_bank:view',
+					],
+					'permission' => [
+						'system_bank:save:add' => '添加',
+						'system_bank:save:edit' => '编辑',
+						'system_bank:delete' => '删除',
+						'system_bank:enable' => '启用',
+						'system_bank:disable' => '禁用',
+					],
+				],
+				'list_bank' => [
+					'title' => '银行卡',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_bank:list',
+						'channel_bank:view',
+						'channel_bank:list_channel',
+					],
+					'permission' => [
+						// 'channel_bank:save:add' => '添加',
+						// 'channel_bank:save:edit' => '编辑',
+						'channel_bank:enable' => '启用',
+						'channel_bank:disable' => '禁用',
+					],
+				],
+				'list_alipay' => [
+					'title' => '支付宝',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_alipay:list',
+						'channel_alipay:view',
+						'channel_alipay:list_channel',
+						'channel_alipay:view_api',
+					],
+					'permission' => [
+						// 'channel_alipay:save:add' => '添加',
+						// 'channel_alipay:save:edit' => '编辑',
+						'channel_alipay:enable' => '启用',
+						'channel_alipay:disable' => '禁用',
+					],
+				],
+				'list_agent' => [
+					'title' => '四方平台',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_agent:list',
+						'channel_agent:view',
+						'channel_agent:list_channel',
+					],
+					'permission' => [
+						// 'channel_agent:save:add' => '添加',
+						// 'channel_agent:save:edit' => '编辑',
+						'channel_agent:enable' => '启用',
+						'channel_agent:disable' => '禁用',
+					],
+				],
+				'list_wechat' => [
+					'title' => '微信通道',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_wechat:list',
+						'channel_wechat:view',
+						'channel_wechat:list_channel',
+					],
+					'permission' => [
+						// 'channel_wechat:save:add' => '添加',
+						// 'channel_wechat:save:edit' => '编辑',
+						'channel_wechat:enable' => '启用',
+						'channel_wechat:disable' => '禁用',
+					],
+				],
+				'list_rgcz' => [
+					'title' => '人工充值',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_rgcz:list',
+						'channel_rgcz:view',
+						'channel_rgcz:list_channel',
+					],
+					'permission' => [
+						// 'channel_rgcz:save:add' => '添加',
+						// 'channel_rgcz:save:edit' => '编辑',
+						'channel_rgcz:enable' => '启用',
+						'channel_rgcz:disable' => '禁用',
+					],
+				],
+				'list_pdddaifu' => [
+					'title' => '拼多多代付',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_pdddaifu:list',
+						'channel_pdddaifu:view',
+						'channel_pdddaifu:list_channel',
+					],
+					'permission' => [
+						// 'channel_pdddaifu:save:add' => '添加',
+						// 'channel_pdddaifu:save:edit' => '编辑',
+						'channel_pdddaifu:enable' => '启用',
+						'channel_pdddaifu:disable' => '禁用',
+					],
+				],
+				'list_douyin' => [
+					'title' => '抖音',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_douyin:list',
+						'channel_douyin:view',
+						'channel_douyin:list_channel',
+					],
+					'permission' => [
+						// 'channel_douyin:save:add' => '添加',
+						// 'channel_douyin:save:edit' => '编辑',
+						'channel_douyin:enable' => '启用',
+						'channel_douyin:disable' => '禁用',
+					],
+				],
+				'list_usdt' => [
+					'title' => 'USDT',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_usdt:list',
+						'channel_usdt:view',
+						'channel_usdt:list_channel',
+					],
+					'permission' => [
+						// 'channel_usdt:save:add' => '添加',
+						// 'channel_usdt:save:edit' => '编辑',
+						'channel_usdt:enable' => '启用',
+						'channel_usdt:disable' => '禁用',
+					],
+				],
+				'list_monitor' => [
+					'title' => '监控管理',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_monitor:list',
+						'channel_monitor:view',
+						'channel_monitor:list_channel',
+						'channel_monitor:view_api',
+					],
+					'permission' => [
+						'channel_monitor:save:add' => '添加',
+						'channel_monitor:save:edit' => '编辑',
+						'channel_monitor:delete' => '删除',
+						'channel_monitor:enable' => '启用',
+						'channel_monitor:disable' => '禁用',
+					],
+				], */
+			],
+		],
 		'finance' => [
 			'title' => '财务管理',
 			'icon' => 'icon-zhexiantu',

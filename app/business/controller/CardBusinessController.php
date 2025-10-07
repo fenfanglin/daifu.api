@@ -4,10 +4,11 @@ namespace app\business\controller;
 use app\extend\common\Common;
 use app\extend\auth\CrossDomainAuth;
 use app\model\Business;
+use app\model\ChannelAccount;
 use app\model\BusinessMoneyLog;
 use app\model\BusinessChannel;
 use app\model\Channel;
-use app\model\ChannelAccount;
+// use app\model\ChannelAccount;
 
 class CardBusinessController extends AuthController
 {
@@ -110,8 +111,10 @@ class CardBusinessController extends AuthController
 			$tmp['commission'] = (string) $model->commission;
 
 			$tmp['status_str'] = isset(Business::STATUS[$model->status]) ? Business::STATUS[$model->status] : '';
+			$tmp['card_type_str'] = $model->card_type == 1 ? '人工支付' : '三方转账';
 			$tmp['status_class'] = isset(Business::STATUS_CLASS[$model->status]) ? Business::STATUS_CLASS[$model->status] : '';
 			$tmp['status'] = (string) $model->status;
+			$tmp['card_type'] = (string) $model->card_type;
 
 			$tmp['verify_status_str'] = isset(Business::VERIFY_STATUS[$model->verify_status]) ? Business::VERIFY_STATUS[$model->verify_status] : '';
 			$tmp['verify_status_class'] = isset(Business::VERIFY_STATUS_CLASS[$model->verify_status]) ? Business::VERIFY_STATUS_CLASS[$model->verify_status] : '';
@@ -235,9 +238,18 @@ class CardBusinessController extends AuthController
 		// $data['create_time'] = $model->create_time;
 		// $data['update_time'] = $model->update_time;
 		$data['status'] = $model->status;
+		$data['card_type'] = $model->card_type;
 		$data['verify_status'] = $model->verify_status;
 		$data['order_rate'] = $model->order_rate;
 		$data['commission'] = $model->commission;
+		if ($model->channel_account_id) {
+			$channel_account = ChannelAccount::where('id',$model->channel_account_id)->find();
+			$data['account'] = $channel_account->mchid ? $channel_account->mchid:'';
+			$data['account_appid'] = $channel_account->appid ? $channel_account->appid:'';
+			$data['secret_key'] = $channel_account->key ? $channel_account->key:'';
+			$data['channel_id'] = $channel_account->channel_id ? $channel_account->channel_id:'';
+		}
+		
 
 		$data['role_id'] = $model->role_id;
 		if ($model->role)
@@ -316,9 +328,27 @@ class CardBusinessController extends AuthController
 		$model->google_secret_key = input('post.google_secret_key');
 		$model->login_ip = input('post.login_ip');
 		$model->status = intval(input('post.status'));
+		$model->card_type = intval(input('post.card_type'));
 		$model->commission = input('post.commission');
 		$model->order_rate = input('post.order_rate');
-
+		$model->channel_id = intval(input('post.channel_id'));
+		if (intval(input('post.card_type')) == 2) {
+			$channel_account = new ChannelAccount;
+			$channel_account->no = $no;
+			$channel_account->business_id = $model->id;
+			// $channel_account->card_business_id = intval(input('post.card_business_id'));
+			$channel_account->channel_id = intval(input('post.channel_id'));
+			$channel_account->mchid = intval(input('post.account'));
+			$channel_account->appid = intval(input('post.account_appid'));
+			$channel_account->key = intval(input('post.secret_key'));
+			if (!$channel_account->save())
+			{
+				return $this->returnError('账号信息保存失败');
+			}
+			$model->channel_account_id = $channel_account->id;
+			
+		}
+		
 		if ($password = input('post.password'))
 		{
 			$model->auth_key = Common::randomStr(6);

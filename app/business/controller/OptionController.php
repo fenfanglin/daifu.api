@@ -36,6 +36,30 @@ class OptionController extends AuthController
 
 		return $this->returnData($data);
 	}
+	/**
+	 * 通道
+	 */
+	public function channel()
+	{
+		$query = \app\model\Channel::field('id, name');
+
+		$query->where('status', 1); //状态：1开启 -1关闭
+
+		$list = $query->order('id asc')->select();
+
+		$data = [];
+		foreach ($list as $value)
+		{
+			$tmp = [];
+			$tmp['id'] = (int) $value['id'];
+			$tmp['name'] = $value['name'];
+
+			$data[] = $tmp;
+		}
+
+		return $this->returnData($data);
+	}
+
 
 
 

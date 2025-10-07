@@ -111,8 +111,10 @@ class BusinessController extends AuthController
 			$tmp['commission'] = (string) $model->commission;
 
 			$tmp['status_str'] = isset(Business::STATUS[$model->status]) ? Business::STATUS[$model->status] : '';
+			$tmp['card_type_str'] = $model->card_type == 1 ? '人工支付' : '三方转账';
 			$tmp['status_class'] = isset(Business::STATUS_CLASS[$model->status]) ? Business::STATUS_CLASS[$model->status] : '';
 			$tmp['status'] = (string) $model->status;
+			$tmp['card_type'] = (string) $model->card_type;
 
 			$tmp['verify_status_str'] = isset(Business::VERIFY_STATUS[$model->verify_status]) ? Business::VERIFY_STATUS[$model->verify_status] : '';
 			$tmp['verify_status_class'] = isset(Business::VERIFY_STATUS_CLASS[$model->verify_status]) ? Business::VERIFY_STATUS_CLASS[$model->verify_status] : '';
@@ -220,6 +222,8 @@ class BusinessController extends AuthController
 		// $data['update_time'] = $model->update_time;
 		$data['remark'] = $model->remark;
 		$data['status'] = $model->status;
+		$data['card_type'] = $model->card_type;
+		$data['channel_id'] = $model->channel_id;
 		$data['verify_status'] = $model->verify_status;
 		$data['allow_withdraw'] = $model->allow_withdraw;
 		$data['order_rate'] = $model->order_rate;
@@ -300,18 +304,22 @@ class BusinessController extends AuthController
 			$model->verify_status = 1;
 		}
 
-		$card_business_ids = implode(',', array_filter(input('post.card_business_ids')));
 
 		$model->realname = input('post.realname');
-		$model->card_business_ids = $card_business_ids;
 		// $model->phone = input('post.phone');
 		// $model->role_id = intval(input('post.role_id'));
 		$model->google_secret_key = input('post.google_secret_key');
 		$model->login_ip = input('post.login_ip');
 		$model->status = intval(input('post.status'));
+		$model->card_type = intval(input('post.card_type'));
 		$model->commission = input('post.commission');
 		$model->order_rate = input('post.order_rate');
-
+		if (intval(input('post.card_type')) == 2) {
+			$model->channel_id = intval(input('post.channel_id'));
+		}else{
+			$card_business_ids = implode(',', array_filter(input('post.card_business_ids')));
+			$model->card_business_ids = $card_business_ids;
+		}
 		if ($password = input('post.password'))
 		{
 			$model->auth_key = Common::randomStr(6);
