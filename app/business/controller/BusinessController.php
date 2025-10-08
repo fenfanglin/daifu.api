@@ -295,8 +295,7 @@ class BusinessController extends AuthController
 				'password|密码' => 'require|min:6|max:50',
 			];
 
-			if (!$this->validate(input('post.'), $rule))
-			{
+			if (!$this->validate(input('post.'), $rule)) {
 				return $this->returnError($this->getValidateError());
 			}
 

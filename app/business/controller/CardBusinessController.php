@@ -657,13 +657,14 @@ class CardBusinessController extends AuthController
 					throw new \Exception('无法找到信息');
 				}
 
-				$channel_account = ChannelAccount::where('card_business_id', $business->id)->find();
+				$channel_account = ChannelAccount::where('business_id', $business->id)->find();
 				if ($channel_account)
 				{
-					$name = $channel_account->channel ? $channel_account->channel->name : '收款';
+					/* $name = $channel_account->channel ? $channel_account->channel->name : '收款';
 					$name .= '账号';
 
-					throw new \Exception("请先删除卡商的{$name}");
+					throw new \Exception("请先删除卡商的{$name}"); */
+					$channel_account -> delete();
 				}
 
 				$business->delete();
