@@ -340,10 +340,10 @@ class CardBusinessController extends AuthController
 				// $channel_account->business_id = $model->id;
 				// $channel_account->card_business_id = intval(input('post.card_business_id'));
 				$channel_account->channel_id = intval(input('post.channel_id'));
-				$channel_account->mchid = intval(input('post.account'));
-				$channel_account->appid = intval(input('post.account_appid'));
-				$channel_account->key_secret = intval(input('post.secret_key'));
-				$channel_account->key_id = intval(input('post.secret_key_id'));
+				$channel_account->mchid =input('post.account');
+				$channel_account->appid = input('post.account_appid');
+				$channel_account->key_secret = input('post.secret_key');
+				$channel_account->key_id = input('post.secret_key_id');
 			}else{
 				$channel_account = new ChannelAccount;
 				$channel_account->no = $no;
