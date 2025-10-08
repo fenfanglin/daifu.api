@@ -16,7 +16,7 @@ class OptionController extends AuthController
 	 */
 	public function card_business()
 	{
-		$query = \app\model\Business::field('id, realname');
+		$query = \app\model\Business::field('id,realname,card_type');
 
 		$query->where('verify_status', 1); //认证状态：-1待认证 1已认证 2不通过
 		$query->where('type', 2); //类型：1代理 2工作室 3商户
@@ -30,6 +30,7 @@ class OptionController extends AuthController
 			$tmp = [];
 			$tmp['id'] = (int)$value['id'];
 			$tmp['name'] = $value['realname'];
+			$tmp['card_type'] = $value['card_type'];
 
 			$data[] = $tmp;
 		}

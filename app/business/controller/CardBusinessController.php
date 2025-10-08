@@ -246,7 +246,8 @@ class CardBusinessController extends AuthController
 			$channel_account = ChannelAccount::where('id',$model->channel_account_id)->find();
 			$data['account'] = $channel_account->mchid ? $channel_account->mchid:'';
 			$data['account_appid'] = $channel_account->appid ? $channel_account->appid:'';
-			$data['secret_key'] = $channel_account->key ? $channel_account->key:'';
+			$data['secret_key'] = $channel_account->key_secret ? $channel_account->key_secret:'';
+			$data['secret_key_id'] = $channel_account->key_id ? $channel_account->key_id:'';
 			$data['channel_id'] = $channel_account->channel_id ? $channel_account->channel_id:'';
 		}
 		
@@ -333,14 +334,28 @@ class CardBusinessController extends AuthController
 		$model->order_rate = input('post.order_rate');
 		$model->channel_id = intval(input('post.channel_id'));
 		if (intval(input('post.card_type')) == 2) {
-			$channel_account = new ChannelAccount;
-			$channel_account->no = $no;
-			$channel_account->business_id = $model->id;
-			// $channel_account->card_business_id = intval(input('post.card_business_id'));
-			$channel_account->channel_id = intval(input('post.channel_id'));
-			$channel_account->mchid = intval(input('post.account'));
-			$channel_account->appid = intval(input('post.account_appid'));
-			$channel_account->key = intval(input('post.secret_key'));
+			$channel_account = ChannelAccount::where('business_id', $model->id)->find();
+			if ($channel_account) {
+				// $channel_account->no = $no;
+				// $channel_account->business_id = $model->id;
+				// $channel_account->card_business_id = intval(input('post.card_business_id'));
+				$channel_account->channel_id = intval(input('post.channel_id'));
+				$channel_account->mchid = intval(input('post.account'));
+				$channel_account->appid = intval(input('post.account_appid'));
+				$channel_account->key_secret = intval(input('post.secret_key'));
+				$channel_account->key_id = intval(input('post.secret_key_id'));
+			}else{
+				$channel_account = new ChannelAccount;
+				$channel_account->no = $no;
+				$channel_account->business_id = $model->id;
+				// $channel_account->card_business_id = intval(input('post.card_business_id'));
+				$channel_account->channel_id = intval(input('post.channel_id'));
+				$channel_account->mchid = intval(input('post.account'));
+				$channel_account->appid = intval(input('post.account_appid'));
+				$channel_account->key_secret = intval(input('post.secret_key'));
+				$channel_account->key_id = intval(input('post.secret_key_id'));
+			}
+			
 			if (!$channel_account->save())
 			{
 				return $this->returnError('账号信息保存失败');

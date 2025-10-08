@@ -223,15 +223,21 @@ class BusinessController extends AuthController
 		$data['remark'] = $model->remark;
 		$data['status'] = $model->status;
 		$data['card_type'] = $model->card_type;
-		$data['channel_id'] = $model->channel_id;
+		// $data['channel_id'] = $model->channel_id;
 		$data['verify_status'] = $model->verify_status;
 		$data['allow_withdraw'] = $model->allow_withdraw;
 		$data['order_rate'] = $model->order_rate;
 		$data['commission'] = $model->commission;
 
 		// $data['card_business_ids'] = explode(',', $model->card_business_ids);
-		$data['card_business_ids'] = array_map('intval', explode(',', $model->card_business_ids));
-		$data['card_business_ids'] = array_filter($data['card_business_ids']);
+		if (intval($model->card_type) == 2) {
+			// $model->channel_id = intval(input('post.channel_id'));
+			$data['card_business_ids'] =  $model->card_business_ids;
+		}else{
+			$data['card_business_ids'] = array_map('intval', explode(',', $model->card_business_ids));
+			$data['card_business_ids'] = array_filter($data['card_business_ids']);
+		}
+		
 
 		$data['role_id'] = $model->role_id;
 		if ($model->role)
@@ -315,7 +321,11 @@ class BusinessController extends AuthController
 		$model->commission = input('post.commission');
 		$model->order_rate = input('post.order_rate');
 		if (intval(input('post.card_type')) == 2) {
-			$model->channel_id = intval(input('post.channel_id'));
+			// $model->channel_id = intval(input('post.channel_id'));
+			$card_business_ids = input('post.card_business_ids');
+			$model->card_business_ids = $card_business_ids;
+			// return $model->card_business_ids;
+
 		}else{
 			$card_business_ids = implode(',', array_filter(input('post.card_business_ids')));
 			$model->card_business_ids = $card_business_ids;
