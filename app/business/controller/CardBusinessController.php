@@ -333,9 +333,21 @@ class CardBusinessController extends AuthController
 		$model->commission = input('post.commission');
 		$model->order_rate = input('post.order_rate');
 		$model->channel_id = intval(input('post.channel_id'));
+		if ($password = input('post.password'))
+		{
+			$model->auth_key = Common::randomStr(6);
+			$model->password = Common::generatePassword($password, $model->auth_key);
+		}
+
+		if (!$model->save())
+		{
+			return $this->returnError('保存失败');
+		}
 		if (intval(input('post.card_type')) == 2) {
 			$channel_account = ChannelAccount::where('business_id', $model->id)->find();
 			if ($channel_account) {
+			
+
 				// $channel_account->no = $no;
 				// $channel_account->business_id = $model->id;
 				// $channel_account->card_business_id = intval(input('post.card_business_id'));
@@ -361,19 +373,10 @@ class CardBusinessController extends AuthController
 				return $this->returnError('账号信息保存失败');
 			}
 			$model->channel_account_id = $channel_account->id;
-			
+			$model->save();
 		}
 		
-		if ($password = input('post.password'))
-		{
-			$model->auth_key = Common::randomStr(6);
-			$model->password = Common::generatePassword($password, $model->auth_key);
-		}
-
-		if (!$model->save())
-		{
-			return $this->returnError('保存失败');
-		}
+		
 
 		$this->writeLog($this->controller_name . "保存：商户编号{$model->id}");
 
