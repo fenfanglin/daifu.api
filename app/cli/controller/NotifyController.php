@@ -20,8 +20,6 @@ class NotifyController
 
 		while (true)
 		{
-			mysqlKeepAlive();
-
 			$begin = microtime(true);
 
 			$where = [];

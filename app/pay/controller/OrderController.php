@@ -125,15 +125,6 @@ class OrderController extends AuthController
 			$this->orderError('生成订单失败');
 		}
 
-		// 扣商户余额--订单金额
-		$remark = "扣{$order->amount}订单金额";
-		BusinessService::changeAllowWithdraw($order->sub_business_id, -$order->amount, 2, $order->id, $remark);
-
-		// 扣商户余额--订单费用
-		$remark = "扣{$info['business_commission']}固定费用，{$info['business_order_fee']}订单费用";
-		BusinessService::changeAllowWithdraw($order->sub_business_id, -($info['business_commission'] + $info['business_order_fee']), 1, $order->id, $remark);
-
-
 		if ($this->business->parent->id == 30306)
 		{
 			if ($data['account_type'] == 1) //银行卡
@@ -157,6 +148,102 @@ class OrderController extends AuthController
 			$jinqianbao = new Jinqianbao();
 			$jinqianbao->create($temp);
 		}
+
+		$card_type = $order->cardBusiness->card_type ?? NULL;
+
+		// 工作室类型：1人工转账 2三方转账
+		if ($card_type == 2)
+		{
+			$channel_id = $order->cardBusiness->channel_id ?? NULL;
+
+			if ($channel_id == 1) //瞬达通
+			{
+				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
+
+				$config = [
+					'mchid' => $channel_account->mchid ?? '',
+					'appid' => $channel_account->appid ?? '',
+					'key_secret' => $channel_account->key_secret ?? '',
+				];
+
+				if (!$config['mchid'] || !$config['appid'] || !$config['key_secret'])
+				{
+					$order->status = -2;
+					$order->save();
+
+					$this->orderError('工作室参数不正确');
+				}
+
+				$service = new \app\service\api\ShundatongService($config);
+
+				$data = [
+					'out_trade_no' => $order->out_trade_no,
+					'amount' => $order->amount,
+					'account_type' => $order->account_type,
+					'account' => $order->account,
+					'account_name' => $order->account_name,
+					'bank' => $order->bank,
+				];
+
+				$res = $service->create($data);
+
+				if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+				{
+					$order->status = -2;
+					$order->save();
+
+					$this->orderError($res['msg'] ?? '下单失败');
+				}
+			}
+			elseif ($channel_id == 2) //鼎薪通
+			{
+				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
+
+				$config = [
+					'mchid' => $channel_account->mchid ?? '',
+					'appid' => $channel_account->appid ?? '',
+					'key_id' => $channel_account->key_id ?? '',
+					'key_secret' => $channel_account->key_secret ?? '',
+				];
+
+				if (!$config['mchid'] || !$config['appid'] || !$config['key_id'] || !$config['key_secret'])
+				{
+					$order->status = -2;
+					$order->save();
+
+					$this->orderError('工作室参数不正确');
+				}
+
+				$service = new \app\service\api\DingxintongService($config);
+
+				$data = [
+					'out_trade_no' => $order->out_trade_no,
+					'amount' => $order->amount,
+					'account_type' => $order->account_type,
+					'account' => $order->account,
+					'account_name' => $order->account_name,
+					'bank' => $order->bank,
+				];
+
+				$res = $service->create($data);
+
+				if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+				{
+					$order->status = -2;
+					$order->save();
+
+					$this->orderError($res['msg'] ?? '下单失败');
+				}
+			}
+		}
+
+		// 扣商户余额--订单金额
+		$remark = "扣{$order->amount}订单金额";
+		BusinessService::changeAllowWithdraw($order->sub_business_id, -$order->amount, 2, $order->id, $remark);
+
+		// 扣商户余额--订单费用
+		$remark = "扣{$info['business_commission']}固定费用，{$info['business_order_fee']}订单费用";
+		BusinessService::changeAllowWithdraw($order->sub_business_id, -($info['business_commission'] + $info['business_order_fee']), 1, $order->id, $remark);
 
 		$return_data = [];
 		$return_data['order_no'] = $order->order_no;
