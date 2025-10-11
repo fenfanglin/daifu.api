@@ -57,14 +57,19 @@ class Business extends BaseModel
 	];
 
 
-	public function role()
-	{
-		return $this->belongsTo(Role::class, 'role_id', 'id');
-	}
-
 	public function parent()
 	{
 		return $this->belongsTo(Business::class, 'parent_id', 'id');
+	}
+
+	public function channel()
+	{
+		return $this->belongsTo(Channel::class, 'channel_id', 'id');
+	}
+
+	public function channelAccount()
+	{
+		return $this->belongsTo(ChannelAccount::class, 'channel_account_id', 'id');
 	}
 
 	/**

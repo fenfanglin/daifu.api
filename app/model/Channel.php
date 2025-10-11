@@ -5,8 +5,6 @@ use app\extend\common\BaseModel;
 
 class Channel extends BaseModel
 {
-	// protected $connection = 'mysql_base';
-
 	protected $table = 'pay_channel';
 
 	protected $createTime = 'create_time';
@@ -26,22 +24,12 @@ class Channel extends BaseModel
 		-1 => 'text-danger',
 	];
 
-	// 通道类型：1网银 2数字货币 3支付宝 4四方平台
+	// 通道类型：1三方通道
 	const TYPE = [
 		1 => '三方通道',
-		
 	];
 	const TYPE_CLASS = [
 		1 => '',
-		2 => '',
-		3 => '',
-		4 => '',
-		6 => '',
-		5 => '',
-		7 => '',
-		8 => '',
-		9 => '',
-		10 => '',
 	];
 
 

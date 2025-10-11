@@ -1,0 +1,134 @@
+<?php
+namespace app\pay\controller;
+
+use app\extend\common\Common;
+use app\service\OrderService;
+use app\service\api\ShundatongService;
+use app\model\ChannelAccount;
+use app\model\Order;
+
+class ApiNotifyShundatongController extends AuthController
+{
+
+	/**
+	 * 监听（只能通过Notify控制器请求，直接请求报错‘拒绝访问’）
+	 */
+	public function index()
+	{
+		// 转账状态: 0-订单生成 1-转账中 2-转账成功 3-转账失败 4-转账关闭
+
+		$transferId = input('post.transferId') ?? ''; //转账单号
+		$mchOrderNo = input('post.mchOrderNo') ?? ''; //商户订单号
+
+		$where = [];
+		$where[] = ['out_trade_no', '=', $mchOrderNo];
+		$order = Order::where($where)->find();
+		if (!$order)
+		{
+			$this->error('无匹配订单');
+		}
+
+		$config = [
+			'mchid' => $order->cardBusiness->channelAccount->mchid ?? '',
+			'appid' => $order->cardBusiness->channelAccount->appid ?? '',
+			'key_secret' => $order->cardBusiness->channelAccount->key_secret ?? '',
+		];
+
+		if (!$config['mchid'] || !$config['appid'] || !$config['key_secret'])
+		{
+			$this->error('工作室参数不正确');
+		}
+
+		$service = new ShundatongService($config);
+
+		// 验证回调信息
+		$res = $service->checkNotifyData(input('post.'));
+
+		if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+		{
+			$this->error($res['msg'] ?? '验证信息未通过');
+		}
+
+
+		// 查询订单
+		$res = $service->query($transferId, $mchOrderNo);
+
+		if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+		{
+			$this->error($res['msg'] ?? '查询订单失败');
+		}
+
+		if (!isset($res['data']['data']['amount']) || $res['data']['data']['amount'] != $order->amount * 100)
+		{
+			$this->error('amount不正确：' . ($res['data']['data']['amount'] ?? 0), ['pay_amount' => $order->pay_amount]);
+		}
+
+
+		if (!isset($res['data']['data']['state']))
+		{
+			$this->error('缺少state参数');
+		}
+
+		// 转账状态: 0-订单生成 1-转账中 2-转账成功 3-转账失败 4-转账关闭
+		if ($res['data']['data']['state'] == 2)
+		{
+			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
+			if ($order->status == -1) //订单状态未支付才处理订单
+			{
+				OrderService::completeOrder($order->id);
+			}
+		}
+
+		// 转账状态: 0-订单生成 1-转账中 2-转账成功 3-转账失败 4-转账关闭
+		if ($res['data']['data']['state'] == 3)
+		{
+			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
+			if ($order->status == -1) //订单状态未支付才处理订单
+			{
+				OrderService::failOrder($order->id);
+			}
+		}
+
+		// 转账状态: 0-订单生成 1-转账中 2-转账成功 3-转账失败 4-转账关闭
+		if ($res['data']['data']['state'] == 4)
+		{
+			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
+			if ($order->status == -1) //订单状态未支付才处理订单
+			{
+				OrderService::notPayOrder($order->id);
+			}
+		}
+
+		$this->success();
+	}
+
+	// --------------------------------------------------------------------------------------------------------------
+	/**
+	 * 报错记录
+	 */
+	private function error($msg, $data = [])
+	{
+		Common::writeLog([
+			'params' => input('post.'),
+			'error' => $msg,
+			'data' => $data,
+		], 'ApiNotifyShundatong');
+
+		echo 'fail';
+		exit();
+	}
+
+	/**
+	 * 成功记录
+	 */
+	private function success()
+	{
+		Common::writeLog([
+			'params' => input('post.'),
+			'msg' => 'SUCCESS',
+		], 'ApiNotifyShundatong');
+
+		echo 'success';
+		exit();
+	}
+}

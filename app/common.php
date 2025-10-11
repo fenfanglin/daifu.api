@@ -152,3 +152,18 @@ function createQrcode($content, $level = 'H', $size = 10, $margin = 1)
 
 	return 'data:image/png;base64,' . base64_encode($img);
 }
+
+function milliseconds()
+{
+	// 获取当前的UNIX时间戳和微秒数
+	$microtime = microtime();
+
+	// 分割微秒数和秒数
+	list($seconds, $microseconds) = explode(" ", $microtime);
+
+	// 转换为毫秒
+	$milliseconds = (int) round($seconds * 1000);
+	$milliseconds += (int) round($microseconds * 1000);
+
+	return $milliseconds;
+}
