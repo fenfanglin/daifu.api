@@ -365,6 +365,11 @@ class OrderController extends AuthController
 			$this->orderError('商户余额不足');
 		}
 
+		if ($this->params['amount'] < $business->min_amount || $this->params['amount'] > $business->max_amount)
+		{
+			$this->orderError("订单金额只能在{$business->min_amount} ~ {$business->max_amount}区间");
+		}
+
 		$this->business = $business;
 		$this->secret_key = $business->secret_key;
 	}
