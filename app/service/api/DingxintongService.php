@@ -216,18 +216,18 @@ class DingxintongService
 			return $this->error($file_log, '错误201: ' . ($res['msg'] ?? '返回code不正确'), $res);
 		}
 
-		if (!isset($res['msgBody'][0]) || !is_array($res['msgBody'][0]))
+		if (!isset($res['data'][0]) || !is_array($res['data'][0]))
 		{
-			return $this->error($file_log, '错误202: 返回msgBody不正确', $res);
+			return $this->error($file_log, '错误202: 返回data不正确', $res);
 		}
 
-		if (!isset($res['msgBody'][0]['transferAmount']))
+		if (!isset($res['data'][0]['transferAmount']))
 		{
 			return $this->error($file_log, '错误203: 接口没返回transferAmount', $res);
 		}
 
 		// 转账状态（0=待转账、1=转账成功、2=已终止/已拒绝、3=转账失败、4=转账中、5=失效）
-		if (!isset($res['msgBody'][0]['transferStatus']))
+		if (!isset($res['data'][0]['transferStatus']))
 		{
 			return $this->error($file_log, '错误204: 接口没返回transferStatus', $res);
 		}

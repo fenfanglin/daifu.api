@@ -15,7 +15,7 @@ class ApiNotifyDingxintongController extends AuthController
 	 */
 	public function index()
 	{
-		$channelMchId = input('post.msgBody')[0]['channelMchId'] ?? ''; //商户订单号
+		$channelMchId = input('post.msgBody')['channelMchId'] ?? ''; //商户订单号
 
 		$where = [];
 		$where[] = ['out_trade_no', '=', $channelMchId];
@@ -56,9 +56,9 @@ class ApiNotifyDingxintongController extends AuthController
 			$this->error($res['msg'] ?? '查询订单失败');
 		}
 
-		if (!isset($res['data']['data']['transferAmount']) || $res['data']['data']['transferAmount'] != $order->amount * 100)
+		if (!isset($res['data']['data'][0]['transferAmount']) || $res['data']['data'][0]['transferAmount'] != $order->amount * 100)
 		{
-			$this->error('amount不正确：' . ($res['data']['data']['amount'] ?? 0), ['pay_amount' => $order->pay_amount]);
+			$this->error('transferAmount不正确：' . ($res['data']['data'][0]['transferAmount'] ?? 0), ['order_amount' => $order->amount]);
 		}
 
 
