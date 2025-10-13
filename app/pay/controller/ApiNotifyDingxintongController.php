@@ -56,19 +56,19 @@ class ApiNotifyDingxintongController extends AuthController
 			$this->error($res['msg'] ?? '查询订单失败');
 		}
 
-		if (!isset($res['data']['data']['amount']) || $res['data']['data']['amount'] != $order->amount * 100)
+		if (!isset($res['data']['data']['transferAmount']) || $res['data']['data']['transferAmount'] != $order->amount * 100)
 		{
 			$this->error('amount不正确：' . ($res['data']['data']['amount'] ?? 0), ['pay_amount' => $order->pay_amount]);
 		}
 
 
-		if (!isset($res['data']['msgBody'][0]['transferStatus']))
+		if (!isset($res['data']['data'][0]['transferStatus']))
 		{
 			$this->error('缺少state参数');
 		}
 
 		// 转账状态（0=待转账、1=转账成功、2=已终止/已拒绝、3=转账失败、4=转账中、5=失效）
-		if ($res['data']['msgBody'][0]['transferStatus'] == 1)
+		if ($res['data']['data'][0]['transferStatus'] == 1)
 		{
 			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
 			if ($order->status == -1) //订单状态未支付才处理订单
@@ -78,7 +78,7 @@ class ApiNotifyDingxintongController extends AuthController
 		}
 
 		// 转账状态（0=待转账、1=转账成功、2=已终止/已拒绝、3=转账失败、4=转账中、5=失效）
-		if (in_array($res['data']['msgBody'][0]['transferStatus'], [2, 3]))
+		if (in_array($res['data']['data'][0]['transferStatus'], [2, 3]))
 		{
 			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
 			if ($order->status == -1) //订单状态未支付才处理订单
@@ -88,7 +88,7 @@ class ApiNotifyDingxintongController extends AuthController
 		}
 
 		// 转账状态（0=待转账、1=转账成功、2=已终止/已拒绝、3=转账失败、4=转账中、5=失效）
-		if ($res['data']['msgBody'][0]['transferStatus'] == 5)
+		if ($res['data']['data'][0]['transferStatus'] == 5)
 		{
 			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
 			if ($order->status == -1) //订单状态未支付才处理订单
@@ -110,7 +110,7 @@ class ApiNotifyDingxintongController extends AuthController
 			'params' => input('post.'),
 			'error' => $msg,
 			'data' => $data,
-		], 'ApiNotifyShundatong');
+		], 'ApiNotifyDingxintong');
 
 		echo 'fail';
 		exit();
@@ -124,7 +124,7 @@ class ApiNotifyDingxintongController extends AuthController
 		Common::writeLog([
 			'params' => input('post.'),
 			'msg' => 'SUCCESS',
-		], 'ApiNotifyShundatong');
+		], 'ApiNotifyDingxintong');
 
 		echo 'success';
 		exit();
