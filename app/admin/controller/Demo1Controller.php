@@ -11,7 +11,7 @@ class Demo1Controller extends BaseController
 		$config = [
 			'mchid' => 'M1759755553',
 			'appid' => '68e3bd22e4b02b5ff8bc1d63',
-			'key' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
+			'key_secret' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
 		];
 
 		$service = new \app\service\api\ShundatongService($config);
@@ -31,7 +31,7 @@ class Demo1Controller extends BaseController
 		$config = [
 			'mchid' => 'M1759755553',
 			'appid' => '68e3bd22e4b02b5ff8bc1d63',
-			'key' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
+			'key_secret' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
 		];
 
 		$service = new \app\service\api\ShundatongService($config);
@@ -51,6 +51,24 @@ class Demo1Controller extends BaseController
 		];
 
 		$res = $service->create($data);
+
+		dd($res);
+	}
+
+	public function query2()
+	{
+		$config = [
+			'mchid' => '1977392152004120577',
+			'appid' => '2021004124686129',
+			'key_id' => 'QEFIZ3PLEOJ4HFRQ9BNE5UWO',
+			'key_secret' => 'T20SJLJCHIJTJJZ0YMLHEI0YTVOPPE',
+		];
+
+		$service = new \app\service\api\DingxintongService($config);
+
+		$order_no = 'UD202510131821274854';
+
+		$res = $service->query($order_no);
 
 		dd($res);
 	}

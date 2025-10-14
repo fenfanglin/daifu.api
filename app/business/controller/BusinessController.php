@@ -112,6 +112,7 @@ class BusinessController extends AuthController
 
 			$tmp['status_str'] = isset(Business::STATUS[$model->status]) ? Business::STATUS[$model->status] : '';
 			$tmp['card_type_str'] = $model->card_type == 1 ? '人工支付' : '三方转账';
+			$tmp['amount_range'] = $model->min_amount . '-' . $model->max_amount;
 			$tmp['status_class'] = isset(Business::STATUS_CLASS[$model->status]) ? Business::STATUS_CLASS[$model->status] : '';
 			$tmp['status'] = (string) $model->status;
 			$tmp['card_type'] = (string) $model->card_type;
@@ -222,6 +223,8 @@ class BusinessController extends AuthController
 		// $data['update_time'] = $model->update_time;
 		$data['remark'] = $model->remark;
 		$data['status'] = $model->status;
+		$data['min_amount'] = $model->min_amount;
+		$data['max_amount'] = $model->max_amount;
 		$data['card_type'] = $model->card_type;
 		// $data['channel_id'] = $model->channel_id;
 		$data['verify_status'] = $model->verify_status;
@@ -230,14 +233,17 @@ class BusinessController extends AuthController
 		$data['commission'] = $model->commission;
 
 		// $data['card_business_ids'] = explode(',', $model->card_business_ids);
-		if (intval($model->card_type) == 2) {
+		if (intval($model->card_type) == 2)
+		{
 			// $model->channel_id = intval(input('post.channel_id'));
-			$data['card_business_ids'] =  $model->card_business_ids;
-		}else{
+			$data['card_business_ids'] = $model->card_business_ids;
+		}
+		else
+		{
 			$data['card_business_ids'] = array_map('intval', explode(',', $model->card_business_ids));
 			$data['card_business_ids'] = array_filter($data['card_business_ids']);
 		}
-		
+
 
 		$data['role_id'] = $model->role_id;
 		if ($model->role)
@@ -295,7 +301,8 @@ class BusinessController extends AuthController
 				'password|密码' => 'require|min:6|max:50',
 			];
 
-			if (!$this->validate(input('post.'), $rule)) {
+			if (!$this->validate(input('post.'), $rule))
+			{
 				return $this->returnError($this->getValidateError());
 			}
 
@@ -316,16 +323,21 @@ class BusinessController extends AuthController
 		$model->google_secret_key = input('post.google_secret_key');
 		$model->login_ip = input('post.login_ip');
 		$model->status = intval(input('post.status'));
+		$model->min_amount = intval(input('post.min_amount'));
+		$model->max_amount = intval(input('post.max_amount'));
 		$model->card_type = intval(input('post.card_type'));
 		$model->commission = input('post.commission');
 		$model->order_rate = input('post.order_rate');
-		if (intval(input('post.card_type')) == 2) {
+		if (intval(input('post.card_type')) == 2)
+		{
 			// $model->channel_id = intval(input('post.channel_id'));
 			$card_business_ids = input('post.card_business_ids');
 			$model->card_business_ids = $card_business_ids;
 			// return $model->card_business_ids;
 
-		}else{
+		}
+		else
+		{
 			$card_business_ids = implode(',', array_filter(input('post.card_business_ids')));
 			$model->card_business_ids = $card_business_ids;
 		}

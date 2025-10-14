@@ -242,15 +242,16 @@ class CardBusinessController extends AuthController
 		$data['verify_status'] = $model->verify_status;
 		$data['order_rate'] = $model->order_rate;
 		$data['commission'] = $model->commission;
-		if ($model->channel_account_id) {
-			$channel_account = ChannelAccount::where('id',$model->channel_account_id)->find();
-			$data['account'] = $channel_account->mchid ? $channel_account->mchid:'';
-			$data['account_appid'] = $channel_account->appid ? $channel_account->appid:'';
-			$data['secret_key'] = $channel_account->key_secret ? $channel_account->key_secret:'';
-			$data['secret_key_id'] = $channel_account->key_id ? $channel_account->key_id:'';
-			$data['channel_id'] = $channel_account->channel_id ? $channel_account->channel_id:'';
+		if ($model->channel_account_id)
+		{
+			$channel_account = ChannelAccount::where('id', $model->channel_account_id)->find();
+			$data['account'] = $channel_account->mchid ? $channel_account->mchid : '';
+			$data['account_appid'] = $channel_account->appid ? $channel_account->appid : '';
+			$data['secret_key'] = $channel_account->key_secret ? $channel_account->key_secret : '';
+			$data['secret_key_id'] = $channel_account->key_id ? $channel_account->key_id : '';
+			$data['channel_id'] = $channel_account->channel_id ? $channel_account->channel_id : '';
 		}
-		
+
 
 		$data['role_id'] = $model->role_id;
 		if ($model->role)
@@ -343,20 +344,24 @@ class CardBusinessController extends AuthController
 		{
 			return $this->returnError('保存失败');
 		}
-		if (intval(input('post.card_type')) == 2) {
+		if (intval(input('post.card_type')) == 2)
+		{
 			$channel_account = ChannelAccount::where('business_id', $model->id)->find();
-			if ($channel_account) {
-			
+			if ($channel_account)
+			{
+
 
 				// $channel_account->no = $no;
 				// $channel_account->business_id = $model->id;
 				// $channel_account->card_business_id = intval(input('post.card_business_id'));
 				$channel_account->channel_id = intval(input('post.channel_id'));
-				$channel_account->mchid =input('post.account');
+				$channel_account->mchid = input('post.account');
 				$channel_account->appid = input('post.account_appid');
 				$channel_account->key_secret = input('post.secret_key');
 				$channel_account->key_id = input('post.secret_key_id');
-			}else{
+			}
+			else
+			{
 				$channel_account = new ChannelAccount;
 				$channel_account->no = $no;
 				$channel_account->business_id = $model->id;
@@ -367,7 +372,7 @@ class CardBusinessController extends AuthController
 				$channel_account->key_secret = input('post.secret_key');
 				$channel_account->key_id = input('post.secret_key_id');
 			}
-			
+
 			if (!$channel_account->save())
 			{
 				return $this->returnError('账号信息保存失败');
@@ -375,8 +380,8 @@ class CardBusinessController extends AuthController
 			$model->channel_account_id = $channel_account->id;
 			$model->save();
 		}
-		
-		
+
+
 
 		$this->writeLog($this->controller_name . "保存：商户编号{$model->id}");
 
@@ -661,10 +666,10 @@ class CardBusinessController extends AuthController
 				if ($channel_account)
 				{
 					/* $name = $channel_account->channel ? $channel_account->channel->name : '收款';
-					$name .= '账号';
+								   $name .= '账号';
 
-					throw new \Exception("请先删除卡商的{$name}"); */
-					$channel_account -> delete();
+								   throw new \Exception("请先删除卡商的{$name}"); */
+					$channel_account->delete();
 				}
 
 				$business->delete();

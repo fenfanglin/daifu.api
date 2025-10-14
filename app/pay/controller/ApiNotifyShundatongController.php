@@ -60,7 +60,7 @@ class ApiNotifyShundatongController extends AuthController
 
 		if (!isset($res['data']['data']['amount']) || $res['data']['data']['amount'] != $order->amount * 100)
 		{
-			$this->error('amount不正确：' . ($res['data']['data']['amount'] ?? 0), ['pay_amount' => $order->pay_amount]);
+			$this->error('amount不正确：' . ($res['data']['data']['amount'] ?? 0), ['pay_amount' => $order->amount]);
 		}
 
 
