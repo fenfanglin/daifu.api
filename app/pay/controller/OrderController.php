@@ -159,6 +159,10 @@ class OrderController extends AuthController
 			if ($channel_id == 1) //瞬达通
 			{
 				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
+				if (!$channel_account)
+				{
+					$this->orderError('三方信息不存在');
+				}
 
 				$config = [
 					'mchid' => $channel_account->mchid ?? '',
@@ -198,6 +202,10 @@ class OrderController extends AuthController
 			elseif ($channel_id == 2) //鼎薪通
 			{
 				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
+				if (!$channel_account)
+				{
+					$this->orderError('三方信息不存在');
+				}
 
 				$config = [
 					'mchid' => $channel_account->mchid ?? '',
@@ -331,6 +339,42 @@ class OrderController extends AuthController
 		if (!$business)
 		{
 			$this->orderError('商户编号不正确！');
+		}
+
+		if (trim($business->api_ip))
+		{
+			$ip = $_SERVER['REMOTE_ADDR']; // 默认使用 REMOTE_ADDR (可能是 8.219.0.224)
+
+			// 优先级高的可信头（针对阿里云 CDN）
+			$trustedHeaders = [
+				'HTTP_ALI_CDN_REAL_IP',     // 阿里云 CDN 真实 IP
+				'HTTP_CF_CONNECTING_IP',    // Cloudflare（备用）
+				'HTTP_X_FORWARDED_FOR',     // 通用代理头，取第一个 IP
+			];
+
+			foreach ($trustedHeaders as $key)
+			{
+				if (!empty($_SERVER[$key]))
+				{
+					if ($key === 'HTTP_X_FORWARDED_FOR')
+					{
+						$proxyIps = explode(',', $_SERVER[$key]);
+						$ip = trim($proxyIps[0]); // 取第一个 IP 作为客户端 IP
+					}
+					else
+					{
+						$ip = trim($_SERVER[$key]);
+					}
+					break;
+				}
+			}
+
+			$api_ip = explode("\n", $business->api_ip);
+
+			if (count($api_ip) > 0 && !in_array($ip, $api_ip))
+			{
+				return $this->orderError("ip不在白名单: {$ip}");
+			}
 		}
 
 		//类型：1代理 2工作室 3商户
