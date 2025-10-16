@@ -313,6 +313,11 @@ class OrderController extends AuthController
 			$this->orderError($this->getValidateError());
 		}
 
+		if (strpos(input('post.notify_url'), 'http://') !== 0 && strpos(input('post.notify_url'), 'https://') !== 0)
+		{
+			$this->orderError('回调连接不正确2');
+		}
+
 		$this->params = $params;
 	}
 

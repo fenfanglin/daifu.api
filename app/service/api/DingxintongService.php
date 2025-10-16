@@ -10,6 +10,8 @@ class DingxintongService
 	protected $create_url_bank = '/api/openapi/alipay/transfer/bankcard';
 	protected $create_url_alipay = '/api/openapi/alipay/transfer/account';
 	protected $query_url = '/api/openapi/alipay/transfer/getTransferDetail';
+	protected $bill_url = '/api/openapi/alipay/transfer/billEreceiptDownloadUrl';
+	protected $account_info = '/api/openapi/account/info';
 	protected $notify_url = 'api_notify_dingxintong/index';
 	protected $white_ip = [
 		// '34.92.166.185',
@@ -230,6 +232,72 @@ class DingxintongService
 		if (!isset($res['data'][0]['transferStatus']))
 		{
 			return $this->error($file_log, '错误204: 接口没返回transferStatus', $res);
+		}
+
+		return $this->success($file_log, '成功', $res);
+	}
+
+	/**
+	 * 电子回单-获取下载链接
+	 */
+	public function bill_url($order_id, $order_no)
+	{
+		$file_log = 'bill_url';
+
+		$url = $this->host . $this->bill_url;
+
+		$params = [];
+		$params['accessKey'] = $this->key_id;
+		$params['timestamp'] = milliseconds();
+		$params['id'] = $order_id;
+		$params['channelMchId'] = $order_no;
+		$params['sign'] = $this->createSign($params, $this->key_secret);
+
+		$res = $this->httpPost($url, $params);
+		$res = json_decode($res, true);
+
+		Common::writeLog(['url' => $url, 'params' => $params, 'res' => $res], 'DingxintongService_bill_url');
+
+		if (!isset($res['code']) || $res['code'] != 0)
+		{
+			return $this->error($file_log, '错误301: ' . ($res['msg'] ?? '返回code不正确'), $res);
+		}
+
+		if (!isset($res['data']))
+		{
+			return $this->error($file_log, '错误302: 返回data不正确', $res);
+		}
+
+		return $this->success($file_log, '成功', $res);
+	}
+
+	/**
+	 * 获取账户信息
+	 */
+	public function account_info()
+	{
+		$file_log = 'account_info';
+
+		$url = $this->host . $this->account_info;
+
+		$params = [];
+		$params['accessKey'] = $this->key_id;
+		$params['timestamp'] = milliseconds();
+		$params['sign'] = $this->createSign($params, $this->key_secret);
+
+		$res = $this->httpPost($url, $params);
+		$res = json_decode($res, true);
+
+		Common::writeLog(['url' => $url, 'params' => $params, 'res' => $res], 'DingxintongService_account_info');
+
+		if (!isset($res['code']) || $res['code'] != 0)
+		{
+			return $this->error($file_log, '错误401: ' . ($res['msg'] ?? '返回code不正确'), $res);
+		}
+
+		if (!isset($res['data']['balance']))
+		{
+			return $this->error($file_log, '错误402: 返回balance不正确', $res);
 		}
 
 		return $this->success($file_log, '成功', $res);

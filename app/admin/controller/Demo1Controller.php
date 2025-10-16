@@ -60,8 +60,8 @@ class Demo1Controller extends BaseController
 		$config = [
 			'mchid' => '1977392152004120577',
 			'appid' => '2021004124686129',
-			'key_id' => 'QEFIZ3PLEOJ4HFRQ9BNE5UWO',
-			'key_secret' => 'T20SJLJCHIJTJJZ0YMLHEI0YTVOPPE',
+			'key_id' => 'IJ0CDFUTHRT38OGYXDESNLBJ',
+			'key_secret' => 'HBMW3SLAHI8R5DZXP6HYW60NWWOJUY',
 		];
 
 		$service = new \app\service\api\DingxintongService($config);
@@ -69,6 +69,41 @@ class Demo1Controller extends BaseController
 		$order_no = 'UD202510131821274854';
 
 		$res = $service->query($order_no);
+
+		dd($res);
+	}
+
+	public function account_info2()
+	{
+		$config = [
+			'mchid' => '1977392152004120577',
+			'appid' => '2021004124686129',
+			'key_id' => 'IJ0CDFUTHRT38OGYXDESNLBJ',
+			'key_secret' => 'HBMW3SLAHI8R5DZXP6HYW60NWWOJUY',
+		];
+
+		$service = new \app\service\api\DingxintongService($config);
+
+		$res = $service->account_info();
+
+		dd($res);
+	}
+
+	public function bill_url2()
+	{
+		$config = [
+			'mchid' => '1977392152004120577',
+			'appid' => '2021004124686129',
+			'key_id' => 'IJ0CDFUTHRT38OGYXDESNLBJ',
+			'key_secret' => 'HBMW3SLAHI8R5DZXP6HYW60NWWOJUY',
+		];
+
+		$service = new \app\service\api\DingxintongService($config);
+
+		$order_id = '1978497723880468482';
+		$order_no = '202510160746528524';
+
+		$res = $service->bill_url($order_id, $order_no);
 
 		dd($res);
 	}
