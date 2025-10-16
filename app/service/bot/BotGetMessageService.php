@@ -9,9 +9,12 @@ use app\model\BotGroup;
 use app\model\BotBatch;
 use app\model\BotOperator;
 use app\model\Business;
+use app\model\BusinessWithdrawLog;
 use app\model\ChannelAccount;
 use app\extend\common\Common;
 use app\model\BotQuestion;
+use app\model\Order;
+use Spatie\PdfToImage\Pdf;
 
 class BotGetMessageService
 {
@@ -114,21 +117,86 @@ class BotGetMessageService
 			$this->sendForwardTextMessage($data);
 		}
 
-		$pattern = '/^[A-Za-z0-9]{34}$/';
-		$is_usdt = preg_match($pattern, $text, $matc);
-		if ($is_usdt)
+		// $pattern = '/^[A-Za-z0-9]{34}$/';
+		// $is_usdt = preg_match($pattern, $text, $matc);
+		// if ($is_usdt)
+		// {
+		// 	$usdt = $matc[0];
+		// 	$global_redis = Common::global_redis();
+		// 	$key = $chatId . $usdt;
+		// 	$u_num = $global_redis->get($key) ?? 0;
+		// 	$data = [
+		// 		'chat_id' => $chatId,
+		// 		'text' => "地址：" . $usdt . "\n该地址群里出现次数：" . ($u_num + 1),
+		// 		'reply_to_message_id' => $this->message_data['message']['message_id']
+		// 	];
+		// 	$global_redis->set($key, ($u_num + 1));
+		// 	$this->sendForwardTextMessage($data);
+		// }
+
+		if (strpos($text, '回单') !== false)
 		{
-			$usdt = $matc[0];
-			$global_redis = Common::global_redis();
-			$key = $chatId . $usdt;
-			$u_num = $global_redis->get($key) ?? 0;
-			$data = [
-				'chat_id' => $chatId,
-				'text' => "地址：" . $usdt . "\n该地址群里出现次数：" . ($u_num + 1),
-				'reply_to_message_id' => $this->message_data['message']['message_id']
-			];
-			$global_redis->set($key, ($u_num + 1));
-			$this->sendForwardTextMessage($data);
+			//查单
+			$pattern = '/\b[A-Za-z0-9]{16,}\b/';
+			$is_order = preg_match($pattern, $text, $matches);
+
+			if ($is_order)
+			{
+				$order_info = $this->bot_function->getOrder($matches[0]);
+				if (!$order_info)
+				{
+					$send_message = "订单不存在！";
+					self::sendMessage($chatId, $send_message);
+					exit;
+				}
+				else
+				{
+					$info = json_decode($order_info['info'], true);
+					if (isset($info['order_id']) && $info['order_id'])
+					{
+						$config = [
+							'mchid' => $order_info->cardBusiness->channelAccount->mchid ?? '',
+							'appid' => $order_info->cardBusiness->channelAccount->appid ?? '',
+							'key_id' => $order_info->cardBusiness->channelAccount->key_id ?? '',
+							'key_secret' => $order_info->cardBusiness->channelAccount->key_secret ?? '',
+						];
+						$service = new \app\service\api\DingxintongService($config);
+
+						$order_id = $info['order_id'];
+						$order_no = $order_info['out_trade_no'];
+
+						$res = $service->bill_url($order_id, $order_no);
+						if (!isset($res['data']['data']))
+						{
+							$send_message = "获取pdf下载地址失败！";
+							self::sendMessage($chatId, $send_message);
+							exit;
+						}
+						$alipayUrl = $res['data']['data']; // 你的完整URL
+						$ch = curl_init();
+						curl_setopt_array($ch, [
+							CURLOPT_URL => $alipayUrl,
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_FOLLOWLOCATION => true,
+							CURLOPT_SSL_VERIFYPEER => false
+						]);
+						$pdfContent = curl_exec($ch);
+
+						$tempDir = root_path() . 'public/df_pdf/';
+						if (!file_exists($tempDir))
+						{
+							mkdir($tempDir, 0777, true);
+						}
+						$pdf_path = $tempDir . $order_no . '.pdf';
+						if (!file_exists($pdf_path))
+						{
+							file_put_contents($pdf_path, $pdfContent);
+						}
+						$this->convertPdfToImageAndSend($pdf_path, $chatId, $text);
+						exit;
+					}
+				}
+			}
 		}
 
 		//查单
@@ -170,6 +238,19 @@ class BotGetMessageService
 		if (substr($text, 0, 3) == 'bd-')
 		{
 			$dl = str_replace(substr($text, 0, 3), '', $text);
+
+			$model = Business::where('id', $dl)->find();
+			if (!$model)
+			{
+				$data = [
+					'chat_id' => $chatId,
+					'text' => '商户不存在,请添加正确的商户号',
+					'reply_to_message_id' => $this->message_data['message']['message_id']
+				];
+				$this->sendForwardTextMessage($data);
+				exit;
+			}
+
 			$model = new BotGroup();
 			$group = $model->where('business_id', $dl)->find();
 			if ($group)
@@ -510,25 +591,63 @@ class BotGetMessageService
 				$this->sendForwardTextMessage($data);
 				exit;
 			}
+
 			$model = Business::where('id', $business->business_id)->find();
+			if (!$model)
+			{
+				$data = [
+					'chat_id' => $chatId,
+					'text' => '商户不存在',
+					'reply_to_message_id' => $this->message_data['message']['message_id']
+				];
+				$this->sendForwardTextMessage($data);
+				exit;
+			}
+
+			$money_log = new BusinessWithdrawLog();
+			$order_model = new Order();
 			switch ($model->type)
 			{
 				case 1:
+					$recharge = $money_log->where('business_id', $model->id)->Where('type', 4)->sum('money');
+					$where = [];
+					$where[] = ['business_id', '=', $model->id];
+					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
+					$where[] = ['status', '=', -1];
+					$money1 = $order_model->where($where)->sum('amount') ?? 0;  //订单金额
+					$money2 = $order_model->where($where)->sum('business_fee') ?? 0;  //商户费用
+					$money3 = $order_model->where($where)->sum('system_rate') ?? 0;   //系统费用
 					$data = [
 						'chat_id' => $chatId,
-						'text' => '代理余额：' . $model->money,
+						'text' => "代理余额：" . $model->money . "\n当天上分：" . $recharge . "\n冻结金额：" . ($money1 + $money2 + $money3),
 						'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
 				case 2:
+					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->sum('money');
+					$where = [];
+					$where[] = ['sub_business_id', '=', $model->id];
+					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
+					$where[] = ['status', '=', -1];
+					$money1 = $order_model->where($where)->sum('amount') ?? 0;  //订单金额
+					$money2 = $order_model->where($where)->sum('business_fee') ?? 0;  //商户费用
+					$money3 = $order_model->where($where)->sum('system_rate') ?? 0;   //系统费用
 					$data = [
 						'chat_id' => $chatId,
-						'text' => '工作室可提现金额：' . $model->allow_withdraw,
+						'text' => "工作室可提现金额：" . $model->allow_withdraw . "\n当天上分：" . $recharge . "\n冻结金额：" . ($money1 + $money2 + $money3),
 						'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
 				case 3:
+					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->sum('money');
+					$where = [];
+					$where[] = ['sub_business_id', '=', $model->id];
+					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
+					$where[] = ['status', '=', -1];
+					$money1 = $order_model->where($where)->sum('amount') ?? 0;  //订单金额
+					$money2 = $order_model->where($where)->sum('business_fee') ?? 0;  //商户费用
+					$money3 = $order_model->where($where)->sum('system_rate') ?? 0;   //系统费用
 					$data = [
 						'chat_id' => $chatId,
-						'text' => '商户余额：' . $model->allow_withdraw,
+						'text' => "商户余额：" . $model->allow_withdraw . "\n当天上分：" . $recharge . "\n冻结金额：" . ($money1 + $money2 + $money3),
 						'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
 					break;
@@ -1143,4 +1262,117 @@ k、z、w      k1000               查询欧意实时汇率 k=银行卡 z=支付
 			return $request;
 		}
 	}
+
+	/**
+	 * 🔥 核心方法：PDF转图片 + 发送Telegram（无exec）
+	 */
+	public function convertPdfToImageAndSend($pdfPath, $chat_id, $caption)
+	{
+		// Step 1: 转换为图片
+		$imagePaths = $this->convertPdfToImages($pdfPath);
+		if (!$imagePaths)
+		{
+			return ['ok' => false, 'error' => '❌ PDF转图片失败'];
+		}
+
+		// Step 2: 发送每张图片到Telegram
+		$botToken = $this->token;     // ← 替换
+		$chatId = $chat_id;
+		$successCount = 0;
+
+		foreach ($imagePaths as $imagePath)
+		{
+			$sendResult = $this->sendImageToTelegram($botToken, $chatId, $imagePath, $caption);
+			if ($sendResult['ok'])
+			{
+				$successCount++;
+			}
+			@unlink($imagePath); // 清理临时文件
+		}
+
+		return [
+			'ok' => $successCount > 0,
+			'error' => $successCount === 0 ? '❌ 所有图片发送失败' : "✅ 发送了 {$successCount} 张图片",
+			'sent_count' => $successCount
+		];
+	}
+
+	/**
+	 * PDF转图片（使用 spatie/pdf-to-image）
+	 */
+	public function convertPdfToImages($pdfPath)
+	{
+		$imagePaths = [];
+		$tempDir = root_path() . 'temp_images/';
+		if (!file_exists($tempDir))
+		{
+			mkdir($tempDir, 0777, true);
+		}
+
+		try
+		{
+			$pdf = new Pdf($pdfPath);
+			$pageCount = $pdf->getNumberOfPages();
+
+			for ($page = 1; $page <= $pageCount; $page++)
+			{
+				$imagePath = $tempDir . 'page_' . $page . '.png';
+				$pdf->setPage($page)
+					->setResolution(300) // 高清
+					->saveImage($imagePath);
+
+				if (file_exists($imagePath))
+				{
+					$imagePaths[] = $imagePath;
+				}
+			}
+		}
+		catch (\Exception $e)
+		{
+			dump($e);
+			die;
+			return false;
+		}
+
+		return !empty($imagePaths) ? $imagePaths : false;
+	}
+
+	/**
+	 * 发送图片到Telegram
+	 */
+	public function sendImageToTelegram($botToken, $chatId, $imagePath, $caption)
+	{
+		if (!file_exists($imagePath))
+		{
+			return ['ok' => false, 'error' => '❌ 图片文件不存在'];
+		}
+
+		$url = "https://api.telegram.org/bot{$botToken}/sendPhoto";
+		$postData = [
+			'chat_id' => $chatId,
+			'caption' => $caption,
+			'photo' => new \CURLFile($imagePath, 'image/png', basename($imagePath)),
+			'reply_to_message_id' => $this->message_data['message']['message_id']
+		];
+
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+			CURLOPT_URL => $url,
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => $postData,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_TIMEOUT => 60
+		]);
+
+		$response = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+
+		$result = json_decode($response, true);
+		return $result['ok']
+			? ['ok' => true, 'message_id' => $result['result']['message_id']]
+			: ['ok' => false, 'error' => $result['description']];
+	}
+
 }
