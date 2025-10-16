@@ -76,15 +76,9 @@ class ApiNotifyDingxintongController extends AuthController
 				OrderService::completeOrder($order->id);
 			}
 
-			$order_id = $res['data']['data'][0]['id'] ?? '';
-
-			// 查询订单
-			$res2 = $service->bill_url($order_id, $channelMchId);
-
-			// 保存订单ID和电子回单
+			// 保存订单ID
 			$info = json_decode($order->info, true);
-			$info['order_id'] = $order_id;
-			$info['bill_url'] = $res2['data']['data'] ?? '';
+			$info['order_id'] = $res['data']['data'][0]['id'] ?? '';
 
 			$order->info = json_encode($info, JSON_UNESCAPED_UNICODE);
 			$order->save();
