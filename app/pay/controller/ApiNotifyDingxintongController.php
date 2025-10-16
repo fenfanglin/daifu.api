@@ -75,6 +75,13 @@ class ApiNotifyDingxintongController extends AuthController
 			{
 				OrderService::completeOrder($order->id);
 			}
+
+			// 保存订单ID
+			$info = json_decode($order->info, true);
+			$info['order_id'] = $res['data']['data'][0]['id'] ?? '';
+
+			$order->info = json_encode($info, JSON_UNESCAPED_UNICODE);
+			$order->save();
 		}
 
 		// 转账状态（0=待转账、1=转账成功、2=已终止/已拒绝、3=转账失败、4=转账中、5=失效）
