@@ -233,7 +233,6 @@ class CardBusinessController extends AuthController
 		$data['allow_withdraw'] = $model->allow_withdraw;
 		$data['google_secret_key'] = $model->google_secret_key;
 		$data['login_ip'] = $model->login_ip;
-		$data['api_ip'] = $model->api_ip;
 		// $data['last_login_time'] = $model->last_login_time;
 		// $data['login_count'] = $model->login_count;
 		// $data['create_time'] = $model->create_time;
@@ -330,7 +329,6 @@ class CardBusinessController extends AuthController
 		// $model->role_id = intval(input('post.role_id'));
 		$model->google_secret_key = input('post.google_secret_key');
 		$model->login_ip = input('post.login_ip');
-		$model->api_ip = input('post.api_ip');
 		$model->status = intval(input('post.status'));
 		$model->card_type = intval(input('post.card_type'));
 		$model->commission = input('post.commission');
@@ -668,9 +666,9 @@ class CardBusinessController extends AuthController
 				if ($channel_account)
 				{
 					/* $name = $channel_account->channel ? $channel_account->channel->name : '收款';
-												  $name .= '账号';
+																 $name .= '账号';
 
-												  throw new \Exception("请先删除卡商的{$name}"); */
+																 throw new \Exception("请先删除卡商的{$name}"); */
 					$channel_account->delete();
 				}
 

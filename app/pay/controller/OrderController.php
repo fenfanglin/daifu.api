@@ -414,9 +414,12 @@ class OrderController extends AuthController
 			$this->orderError('商户余额不足');
 		}
 
-		if ($this->params['amount'] < $business->min_amount || $this->params['amount'] > $business->max_amount)
+		if (isset($this->params['amount']))
 		{
-			$this->orderError("订单金额只能在{$business->min_amount} ~ {$business->max_amount}区间");
+			if ($this->params['amount'] < $business->min_amount || $this->params['amount'] > $business->max_amount)
+			{
+				$this->orderError("订单金额只能在{$business->min_amount} ~ {$business->max_amount}区间");
+			}
 		}
 
 		$this->business = $business;
@@ -605,6 +608,45 @@ class OrderController extends AuthController
 			$data['status'] = 'ERROR';
 			$data['status_msg'] = '生成订单失败';
 		}
+
+		return $this->returnData($data, '成功');
+	}
+
+	/**
+	 * 查询账号信息
+	 */
+	public function account_info()
+	{
+		$this->writeLog(); //写入操作日志
+
+		$params = input('post.');
+
+		$rule = [
+			'mchid|商户编号' => 'require|integer|>:0',
+			'timestamp|查询时间' => 'require|integer|>:0',
+			'sign|签名' => 'require',
+		];
+
+		$message = [
+			'mchid' => '商户编号不正确',
+			'timestamp' => '查询时间不正确',
+			'sign' => '签名不正确',
+		];
+
+		if (!$this->validate($params, $rule, $message))
+		{
+			$this->orderError($this->getValidateError());
+		}
+
+		$this->params = $params;
+
+		$this->checkBusiness(); //用户检测，获取$this->business
+
+		$this->checkSign($params, $this->secret_key); //验证签名
+
+		$data = [];
+		$data['mchid'] = $this->business->id;
+		$data['balance'] = $this->business->allow_withdraw;
 
 		return $this->returnData($data, '成功');
 	}
