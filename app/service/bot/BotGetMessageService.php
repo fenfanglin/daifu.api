@@ -99,12 +99,12 @@ class BotGetMessageService
 		$send_message = '';
 
 		//U地址确认
-		$pattern = '/^[A-Za-z0-9]{34}\s[0-9]+[A-Za-z]$/';
+		$pattern = '/^[A-Za-z0-9]{34}$/';
 		$is_usdt = preg_match($pattern, $text, $matche);
 		if ($is_usdt)
 		{
 			$usdt = $matche[0];
-			$usdt = explode(" ", $usdt)[0];
+			// 			$usdt = explode(" ", $usdt)[0];
 			$global_redis = Common::global_redis();
 			$key = $chatId . $usdt;
 			$u_num = $global_redis->get($key) ?? 0;
