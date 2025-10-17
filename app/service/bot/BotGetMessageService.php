@@ -399,12 +399,13 @@ class BotGetMessageService
 			$pattern = '/^(\([^()]+\)|[0-9]+(\.[0-9]+)*)+(\([^()]+\)|[0-9]+(\.[0-9]+)*|\*|\/|\+|\-)*$/';
 			if (!preg_match($pattern, $money))
 			{
-				$data = [
-					'chat_id' => $chatId,
-					'text' => '金额错误!',
-					'reply_to_message_id' => $this->message_data['message']['message_id']
-				];
-				$this->sendForwardTextMessage($data);
+				// $data = [
+				// 	'chat_id' => $chatId,
+				// 	'text' => '金额错误!',
+				// 	'reply_to_message_id' => $this->message_data['message']['message_id']
+				// ];
+				// $this->sendForwardTextMessage($data);
+				exit;
 			}
 			$result = null;
 			eval ('$result = ' . $money . ';');
@@ -464,7 +465,10 @@ class BotGetMessageService
 		$pattern = '/^(\([^()]+\)|[0-9]+(\.[0-9]+)*)+(\([^()]+\)|[0-9]+(\.[0-9]+)*|\*|\/|\+|\-)*$/';
 		if (preg_match($pattern, $text))
 		{
-
+			if (strlen($text) < 3)
+			{
+				exit;
+			}
 			$result = null;
 			eval ('$result = ' . $text . ';');
 			$money = $result;
