@@ -5,7 +5,7 @@ use app\extend\common\Common;
 
 class DingxintongService
 {
-	protected $host = 'http://cn3.dingxintongcloud.com';
+	protected $host = 'http://dingxintongcloud.com';
 
 	protected $create_url_bank = '/api/openapi/alipay/transfer/bankcard';
 	protected $create_url_alipay = '/api/openapi/alipay/transfer/account';
@@ -356,7 +356,7 @@ class DingxintongService
 
 		if (count($this->white_ip) > 0 && !in_array($ip, $this->white_ip))
 		{
-			return $this->error("ip不在白名单: {$ip}");
+			return $this->error($file_log, "ip不在白名单: {$ip}");
 		}
 
 		if (!isset($data['sign']) || !$data['sign'])

@@ -29,6 +29,13 @@ class DocumentController extends BaseController
 		return view($this->template, $assign);
 	}
 
+	public function api_account_info()
+	{
+		$assign['include_file'] = 'document/api_account_info';
+
+		return view($this->template, $assign);
+	}
+
 	public function api_sign()
 	{
 		$assign['include_file'] = 'document/api_sign';

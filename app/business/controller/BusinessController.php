@@ -217,6 +217,7 @@ class BusinessController extends AuthController
 		$data['money'] = $model->money;
 		$data['google_secret_key'] = $model->google_secret_key;
 		$data['login_ip'] = $model->login_ip;
+		$data['api_ip'] = $model->api_ip;
 		// $data['last_login_time'] = $model->last_login_time;
 		// $data['login_count'] = $model->login_count;
 		// $data['create_time'] = $model->create_time;
@@ -322,6 +323,7 @@ class BusinessController extends AuthController
 		// $model->role_id = intval(input('post.role_id'));
 		$model->google_secret_key = input('post.google_secret_key');
 		$model->login_ip = input('post.login_ip');
+		$model->api_ip = input('post.api_ip');
 		$model->status = intval(input('post.status'));
 		$model->min_amount = intval(input('post.min_amount'));
 		$model->max_amount = intval(input('post.max_amount'));
