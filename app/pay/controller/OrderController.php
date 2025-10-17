@@ -609,6 +609,11 @@ class OrderController extends AuthController
 			$data['status_msg'] = '生成订单失败';
 		}
 
+		Common::writeLog([
+			'params' => input('post.'),
+			'return_data' => $data,
+		], 'order_query');
+
 		return $this->returnData($data, '成功');
 	}
 
