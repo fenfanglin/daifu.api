@@ -4,6 +4,7 @@ namespace app\pay\controller;
 
 use app\extend\common\Common;
 use app\model\Channel;
+use app\model\ChannelAccount;
 use app\model\Business;
 use app\model\BusinessChannel;
 use app\model\Order;
@@ -58,8 +59,25 @@ class OrderController extends AuthController
 			$this->orderError('重复订单号');
 		}
 
-		// 获取收款账号
-		$card_business = $this->getCardBusiness();
+		// 工作室类型：1人工转账 2三方转账
+		if ($this->business->card_type == 1)
+		{
+			// 获取工作室
+			$card_business = $this->getCardBusiness();
+		}
+		else
+		{
+			// 获取收款账号
+			$channel_account = $this->getChannelAccount();
+			$card_business = $channel_account->cardBusiness ?? NULL;
+
+			if (!$card_business)
+			{
+				$this->orderError('无可用工作室3');
+			}
+		}
+
+
 		$amount = $data['amount'];
 
 
@@ -91,7 +109,7 @@ class OrderController extends AuthController
 		$order->account_type = $data['account_type'];
 		$order->business_id = $this->business->parent->id;
 		$order->sub_business_id = $this->business->id;
-		$order->card_business_id = $card_business->id;
+		$order->card_business_id = $card_business->id ?? 0;
 		$order->amount = $amount;
 		$order->out_trade_no = $data['out_trade_no'];
 		$order->ip = Common::getClientIp();
@@ -149,21 +167,18 @@ class OrderController extends AuthController
 			$jinqianbao->create($temp);
 		}
 
-		$card_type = $order->cardBusiness->card_type ?? NULL;
-
 		// 工作室类型：1人工转账 2三方转账
-		if ($card_type == 2)
+		if ($this->business->card_type == 2)
 		{
-			$channel_id = $order->cardBusiness->channel_id ?? NULL;
+			if (!$channel_account)
+			{
+				$this->orderError('三方信息不存在');
+			}
+
+			$channel_id = $channel_account->channel_id ?? NULL;
 
 			if ($channel_id == 1) //瞬达通
 			{
-				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
-				if (!$channel_account)
-				{
-					$this->orderError('三方信息不存在');
-				}
-
 				$config = [
 					'mchid' => $channel_account->mchid ?? '',
 					'appid' => $channel_account->appid ?? '',
@@ -201,12 +216,6 @@ class OrderController extends AuthController
 			}
 			elseif ($channel_id == 2) //鼎薪通
 			{
-				$channel_account = $order->cardBusiness->channelAccount ?? NULL;
-				if (!$channel_account)
-				{
-					$this->orderError('三方信息不存在');
-				}
-
 				$config = [
 					'mchid' => $channel_account->mchid ?? '',
 					'appid' => $channel_account->appid ?? '',
@@ -464,11 +473,11 @@ class OrderController extends AuthController
 	}
 
 	/**
-	 * 获取工作室账号
+	 * 获取工作室账号（人工转账）
 	 */
 	private function getCardBusiness()
 	{
-		$card_business_ids = $this->business->card_business_ids;
+		$card_business_ids = $this->card_business_ids;
 		$parent_id = $this->business->parent_id;
 
 		// \think\facade\Db::startTrans();
@@ -482,14 +491,68 @@ class OrderController extends AuthController
 			$where[] = ['status', '=', 1];
 
 			// is_use是否已下单 1是 0否（用于轮询下单）
-			$account = Business::where($where)->where('is_use', 0)->find();
+			$card_business = Business::where($where)->where('is_use', 0)->find();
 
-			if (!$account) //如果未找到匹配，复原下单状态
+			if (!$card_business) //如果未找到匹配，复原下单状态
 			{
 				Business::where($where)->save(['is_use' => 0]);
 
 				// 再次获取商户所有匹配金额的工作室，未下单状态
-				$account = Business::where($where)->where('is_use', 0)->find();
+				$card_business = Business::where($where)->where('is_use', 0)->find();
+			}
+
+			if (!$card_business)
+			{
+				throw new \Exception('无可用工作室');
+			}
+
+			$card_business->is_use = 1;
+			if (!$card_business->save())
+			{
+				throw new \Exception('无可用工作室2');
+			}
+
+			// \think\facade\Db::commit();
+
+			return $card_business;
+
+		}
+		catch (\Exception $e)
+		{
+
+			// \think\facade\Db::rollback();
+
+			$this->orderError($e->getMessage());
+
+		}
+	}
+
+	/**
+	 * 获取三方转账长啊后（三方转账）
+	 */
+	private function getChannelAccount()
+	{
+		$card_business_ids = $this->business->card_business_ids;
+		$business_id = $this->business->parent_id;
+
+		// \think\facade\Db::startTrans();
+		try
+		{
+
+			$where = [];
+			$where[] = ['business_id', '=', $business_id];
+			$where[] = ['card_business_id', 'in', $card_business_ids];
+			$where[] = ['status', '=', 1];
+
+			// is_use是否已下单 1是 0否（用于轮询下单）
+			$account = ChannelAccount::where($where)->where('is_use', 0)->find();
+
+			if (!$account) //如果未找到匹配，复原下单状态
+			{
+				ChannelAccount::where($where)->save(['is_use' => 0]);
+
+				// 再次获取商户所有匹配金额的工作室，未下单状态
+				$account = ChannelAccount::where($where)->where('is_use', 0)->find();
 			}
 
 			if (!$account)
