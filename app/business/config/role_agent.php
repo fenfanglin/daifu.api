@@ -194,6 +194,45 @@ return [
 				],
 			],
 		],
+		'channel' => [
+			'title' => '三方通道',
+			'icon' => 'icon-yingyongguanli',
+			'hidden' => false,
+			'children' => [
+				'list_shundatong' => [
+					'title' => '瞬达通',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_shundatong:list',
+						'channel_shundatong:view',
+					],
+					'permission' => [
+						'channel_shundatong:save:add' => '添加',
+						'channel_shundatong:save:edit' => '编辑',
+						'channel_shundatong:delete' => '删除',
+						'channel_shundatong:enable' => '启用',
+						'channel_shundatong:disable' => '禁用',
+					],
+				],
+				'list_dingxintong' => [
+					'title' => '鼎薪通',
+					'hidden' => false,
+					'noCache' => false,
+					'white_list' => [
+						'channel_dingxintong:list',
+						'channel_dingxintong:view',
+					],
+					'permission' => [
+						'channel_dingxintong:save:add' => '添加',
+						'channel_dingxintong:save:edit' => '编辑',
+						'channel_dingxintong:delete' => '删除',
+						'channel_dingxintong:enable' => '启用',
+						'channel_dingxintong:disable' => '禁用',
+					],
+				],
+			],
+		],
 		'finance' => [
 			'title' => '财务管理',
 			'icon' => 'icon-zhexiantu',

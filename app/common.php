@@ -167,3 +167,69 @@ function milliseconds()
 
 	return $milliseconds;
 }
+
+/**
+ * 根据商户类型生成查询条件
+ */
+function setChannelWhere($user, &$query)
+{
+	// 类型：1代理 2工作室 3商户
+	if (in_array($user->type, [1]))
+	{
+		$query->where('business_id', $user->id);
+	}
+	elseif (in_array($user->type, [2]))
+	{
+		$query->where('card_business_id', $user->id);
+	}
+	else
+	{
+		$query->where('id', 0); //不显示内容
+	}
+}
+
+/**
+ * 检查信息是否属于商户
+ */
+function checkAccountBelongBusiness($user, $model)
+{
+	// 类型：1代理 2工作室 3商户
+	if (in_array($user->type, [1]))
+	{
+		if ($model->business_id != $user->id)
+		{
+			return ['status' => false, 'msg' => '信息不属于代理'];
+		}
+	}
+	elseif (in_array($user->type, [2]))
+	{
+		if ($model->card_business_id != $user->id)
+		{
+			return ['status' => false, 'msg' => '信息不属于工作室'];
+		}
+	}
+	else
+	{
+		return ['status' => false, 'msg' => '信息不属于商户'];
+	}
+
+	return ['status' => true, 'msg' => '成功'];
+}
+
+/**
+ * 收款账号设置商户信息
+ */
+function setAccountBusinessInfo($user, &$model)
+{
+	// 类型：1代理 2工作室 3商户
+	if (in_array($user->type, [1]))
+	{
+		$model->business_id = $user->id;
+		$model->card_business_id = intval(input('post.card_business_id'));
+	}
+	elseif (in_array($user->type, [2]))
+	{
+		$model->business_id = $user->parent_id;
+		$model->card_business_id = $user->id;
+	}
+}
