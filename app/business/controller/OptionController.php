@@ -10,17 +10,31 @@ use app\extend\common\BaseController;
  */
 class OptionController extends AuthController
 {
-
 	/**
 	 * 卡商列表
 	 */
 	public function card_business()
 	{
-		$query = \app\model\Business::field('id,realname,card_type');
+		$rule = [
+			'card_type|工作室类型' => 'integer',
+		];
 
-		$query->where('verify_status', 1); //认证状态：-1待认证 1已认证 2不通过
+		if (!$this->validate(input('post.'), $rule))
+		{
+			return $this->returnError($this->getValidateError());
+		}
+
+		$card_type = intval(input('post.card_type') ?? NULL);
+
+		$query = \app\model\Business::field('id, realname, card_type');
+
 		$query->where('type', 2); //类型：1代理 2工作室 3商户
 		$query->where('parent_id', $this->user->id);
+
+		if (!empty($card_type))
+		{
+			$query->where('card_type', $card_type);
+		}
 
 		$list = $query->order('id asc')->select();
 
@@ -28,9 +42,8 @@ class OptionController extends AuthController
 		foreach ($list as $value)
 		{
 			$tmp = [];
-			$tmp['id'] = (int)$value['id'];
+			$tmp['id'] = (int) $value['id'];
 			$tmp['name'] = $value['realname'];
-			$tmp['card_type'] = $value['card_type'];
 
 			$data[] = $tmp;
 		}
@@ -61,14 +74,9 @@ class OptionController extends AuthController
 		return $this->returnData($data);
 	}
 
-
-
-
-
-    public function get_usdt_rate()
-    {
-        $data = $this->setting->usdt_rate;
-        return $this->returnData($data);
-    }
-
+	public function get_usdt_rate()
+	{
+		$data = $this->setting->usdt_rate;
+		return $this->returnData($data);
+	}
 }
