@@ -551,12 +551,12 @@ class OrderController extends AuthController
 			$info[] = [
 				'title' => 'Usdt汇率',
 				'value' => $model->usdt_rate,
-				'class' => 'text-warning bolder',
+				'class' => '',
 			];
 			$info[] = [
 				'title' => 'Usdt金额',
 				'value' => $model->usdt_amount,
-				'class' => 'text-success bolder',
+				'class' => '',
 			];
 		}
 		elseif ($model->account_type == 3) //支付宝
@@ -592,29 +592,44 @@ class OrderController extends AuthController
 			];
 		}
 
-
+		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
+			$agent_commission = floatval($tmp['info']['agent_commission'] ?? 0);
+			$agent_order_fee = floatval($tmp['info']['agent_order_fee'] ?? 0);
+			$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
+
 			$info[] = [
-				'title' => '费用',
-				'value' => $model->status > 0 ? ($model->system_fee + $model->commission) : '',
-				'class' => 'bolder',
+				'title' => '代理费用',
+				'value' => $model->status > 0 ? $_fee : '',
+				'class' => '',
+			];
+		}
+		elseif (in_array($this->user->type, [2]))
+		{
+			$card_commission = floatval($tmp['info']['card_commission'] ?? 0);
+			$card_order_fee = floatval($tmp['info']['card_order_fee'] ?? 0);
+			$_fee = ($card_commission + $card_order_fee) . "（{$card_commission}固定费用，{$card_order_fee}订单费用）";
+
+			$info[] = [
+				'title' => '工作室费用',
+				'value' => $model->status > 0 ? $_fee : '',
+				'class' => '',
+			];
+		}
+		elseif (in_array($this->user->type, [3]))
+		{
+			$business_commission = floatval($tmp['info']['business_commission'] ?? 0);
+			$business_order_fee = floatval($tmp['info']['business_order_fee'] ?? 0);
+			$_fee = ($business_commission + $business_order_fee) . "（{$business_commission}固定费用，{$business_order_fee}订单费用）";
+
+			$info[] = [
+				'title' => '商户费用',
+				'value' => $model->status > 0 ? $_fee : '',
+				'class' => '',
 			];
 		}
 
-		if (in_array($this->user->type, [3])) //类型：1代理 2工作室 3商户
-		{
-			$info[] = [
-				'title' => '费用',
-				'value' => $model->status > 0 ? $model->business_fee : '',
-				'class' => 'bolder',
-			];
-			$info[] = [
-				'title' => '可提现金额',
-				'value' => $model->status > 0 ? $model->allow_withdraw : '',
-				'class' => 'bolder',
-			];
-		}
 		if (!empty($model->image_url))
 		{
 			$info[] = [
