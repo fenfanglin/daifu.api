@@ -213,24 +213,12 @@ class OrderController extends AuthController
 		if (!$is_export)
 		{
 			$business_id = $this->user->id;
-			$url = 'order/list';
-			$name = '订单列表';
-			$num = 1;
-			$num_sql = 0;
-			$use_cache = 0;
 
 			$sign = md5(json_encode($where, JSON_UNESCAPED_UNICODE));
 			$key = "business_data_order_{$business_id}_{$sign}";
 
-			if ($_data = $this->redis->get($key))
+			if ($_data = $this->redis->get($key) && 0)
 			{
-				$use_cache = 1;
-
-				if (isset($_begin_time_success) || isset($_begin_time_create))
-				{
-					$num_sql += 3;
-				}
-
 				$data['info'] = $_data;
 			}
 			else
@@ -257,8 +245,6 @@ class OrderController extends AuthController
 					{
 						$data['info']['success_rate'] = round($data['info']['success_order'] / ($data['info']['total_order']) * 100, 2);
 					}
-
-					$num_sql += 3;
 				}
 
 
@@ -334,8 +320,6 @@ class OrderController extends AuthController
 
 				$this->redis->set($key, $_data, getDataCacheTime());
 			}
-
-			$num_sql += 3;
 		}
 
 		return $data;
