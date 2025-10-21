@@ -132,6 +132,26 @@ class OrderController extends AuthController
 	{
 		$page = intval(input('post.page') ?? 1);
 		$limit = intval(input('post.limit') ?? 10);
+		$success_time = input('post.success_time') ?? NULL;
+		$create_time = input('post.create_time') ?? NULL;
+
+		if (!empty($success_time[0]) && $success_time[0] > 0)
+		{
+			$_begin_time_success = date('Y-m-d H:i:s', strtotime($success_time[0]));
+		}
+		if (!empty($success_time[1]) && $success_time[1] > 0)
+		{
+			$_end_time_success = date('Y-m-d H:i:s', strtotime($success_time[1]));
+		}
+		if (!empty($create_time[0]) && $create_time[0] > 0)
+		{
+			$_begin_time_create = date('Y-m-d H:i:s', strtotime($create_time[0]));
+		}
+		if (!empty($create_time[1]) && $create_time[1] > 0)
+		{
+			$_end_time_create = date('Y-m-d H:i:s', strtotime($create_time[1]));
+		}
+
 		$where = $this->_create_where();
 
 		if ($is_export == 1)
