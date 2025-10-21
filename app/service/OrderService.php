@@ -102,7 +102,7 @@ class OrderService
 	/**
 	 * 订单设为失败
 	 */
-	public static function failOrder($order_id)
+	public static function failOrder($order_id, $error_msg = '')
 	{
 		$order = Order::where('id', $order_id)->find();
 		if (!$order)
@@ -115,16 +115,18 @@ class OrderService
 			self::error('订单已处理过', ['order_id' => $order_id]);
 		}
 
+		$info = json_decode($order->info, true);
+		$info['error_msg'] = $error_msg;
+
 		$_order_status = $order->status;
 
+		$order->info = json_encode($info, JSON_UNESCAPED_UNICODE);
 		$order->success_time = NULL;
 		$order->status = -2; //状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
 		if (!$order->save())
 		{
 			self::error('完成订单保存失败', ['order_id' => $order_id]);
 		}
-
-		$info = json_decode($order->info, true);
 
 		// - 返回商户费用
 		// - 如果订单是成功就返回代理和工作室费用

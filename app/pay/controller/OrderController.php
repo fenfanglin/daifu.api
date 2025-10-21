@@ -85,24 +85,24 @@ class OrderController extends AuthController
 		$agent_order_rate = $this->business->parent->order_rate ?? 0;
 		$agent_order_fee = number_format($agent_order_rate * $amount, 4, '.', '');
 
-		$business_commission = $this->business->commission ?? 0;
-		$business_order_rate = $this->business->order_rate ?? 0;
-		$business_order_fee = number_format($business_order_rate * $amount, 4, '.', '');
-
 		$card_commission = $card_business->commission ?? 0;
 		$card_order_rate = $card_business->order_rate ?? 0;
 		$card_order_fee = number_format($card_order_rate * $amount, 4, '.', '');
+
+		$business_commission = $this->business->commission ?? 0;
+		$business_order_rate = $this->business->order_rate ?? 0;
+		$business_order_fee = number_format($business_order_rate * $amount, 4, '.', '');
 
 		$info = [
 			'agent_commission' => $agent_commission,
 			'agent_order_rate' => $agent_order_rate,
 			'agent_order_fee' => $agent_order_fee,
-			'business_commission' => $business_commission,
-			'business_order_rate' => $business_order_rate,
-			'business_order_fee' => $business_order_fee,
 			'card_commission' => $card_commission,
 			'card_order_rate' => $card_order_rate,
 			'card_order_fee' => $card_order_fee,
+			'business_commission' => $business_commission,
+			'business_order_rate' => $business_order_rate,
+			'business_order_fee' => $business_order_fee,
 		];
 
 		$order = new Order();
@@ -111,6 +111,15 @@ class OrderController extends AuthController
 		$order->sub_business_id = $this->business->id;
 		$order->card_business_id = $card_business->id ?? 0;
 		$order->amount = $amount;
+		$order->agent_commission = $agent_commission;
+		$order->agent_order_rate = $agent_order_rate;
+		$order->agent_order_fee = $agent_order_fee;
+		$order->card_commission = $card_commission;
+		$order->card_order_rate = $card_order_rate;
+		$order->card_order_fee = $card_order_fee;
+		$order->business_commission = $business_commission;
+		$order->business_order_rate = $business_order_rate;
+		$order->business_order_fee = $business_order_fee;
 		$order->out_trade_no = $data['out_trade_no'];
 		$order->ip = Common::getClientIp();
 		$order->notify_url = $data['notify_url'];
@@ -176,6 +185,10 @@ class OrderController extends AuthController
 			}
 
 			$channel_id = $channel_account->channel_id ?? NULL;
+
+			$order->channel_id = $channel_id;
+			$order->channel_account_id = $channel_account->id;
+			$order->save();
 
 			if ($channel_id == 1) //瞬达通
 			{

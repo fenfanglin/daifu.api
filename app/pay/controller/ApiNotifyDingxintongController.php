@@ -90,7 +90,9 @@ class ApiNotifyDingxintongController extends AuthController
 			// 状态：-1未支付 1成功，未回调 2成功，已回调 -2支付失败
 			if ($order->status == -1) //订单状态未支付才处理订单
 			{
-				OrderService::failOrder($order->id);
+				$error_msg = $res['data']['data'][0]['description'] ?? '';
+
+				OrderService::failOrder($order->id, $error_msg);
 			}
 		}
 

@@ -14,6 +14,7 @@ use app\model\ChannelAccount;
 use app\extend\common\Common;
 use app\model\BotQuestion;
 use app\model\Order;
+use app\service\api\DingxintongService;
 use Spatie\PdfToImage\Pdf;
 
 class BotGetMessageService
@@ -117,6 +118,49 @@ class BotGetMessageService
 			$this->sendForwardTextMessage($data);
 		}
 
+		if (strpos($text, 'bdu-') !== false)
+		{
+			$this->checkOperator($chatId, $username);
+			Common::writeLog(['msg' => '绑定u地址', '操作人' => $username], 'bot_usdt_address_save');
+			$u_address = str_replace(substr($text, 0, 4), '', $text);
+			$global_redis = Common::global_redis();
+			$key = 'jqk_dfu_address';
+			$global_redis->set($key, $u_address);
+			$data = [
+				'chat_id' => $chatId,
+				'text' => "绑定成功",
+				'reply_to_message_id' => $this->message_data['message']['message_id']
+			];
+			$this->sendForwardTextMessage($data);
+		}
+
+		if ($text == '地址')
+		{
+			$global_redis = Common::global_redis();
+			$key = 'jqk_dfu_address';
+			$usdt_address = $global_redis->get($key);
+			if (!$usdt_address)
+			{
+				exit;
+			}
+			$data = [
+				'chat_id' => $chatId,
+				'text' => "唯一转账地址:
+
+ TRC:  <code>" . $usdt_address . "</code>
+
+ ⬆️⬆️点击上方地址即可复制⬆️⬆️ 
+
+👉转U后请提供附有哈希值实时转账图，公共网页链接图一律不退不认👈
+
+⚠️如遇到，当笔充值与上笔充值地址有变的，需我方至少两人同时确认",
+				'reply_to_message_id' => $this->message_data['message']['message_id'],
+				'parse_mode' => 'HTML',
+				'disable_web_page_preview' => true
+			];
+			$this->sendForwardTextMessage($data);
+		}
+
 		// $pattern = '/^[A-Za-z0-9]{34}$/';
 		// $is_usdt = preg_match($pattern, $text, $matc);
 		// if ($is_usdt)
@@ -208,8 +252,8 @@ class BotGetMessageService
 			$order_info = $this->bot_function->getOrder($matches[0]);
 			if (!$order_info)
 			{
-				$send_message = "订单不存在！";
-				self::sendMessage($chatId, $send_message);
+				// $send_message = "订单不存在！";
+				// self::sendMessage($chatId, $send_message);
 				exit;
 			}
 			else
@@ -220,7 +264,32 @@ class BotGetMessageService
 						self::sendMessage($chatId, '订单未支付');
 						exit;
 					case -2:    //未支付  转发码商
-						self::sendMessage($chatId, '支付失败');
+						$config = [
+							'mchid' => $order_info->cardBusiness->channelAccount->mchid ?? '',
+							'appid' => $order_info->cardBusiness->channelAccount->appid ?? '',
+							'key_id' => $order_info->cardBusiness->channelAccount->key_id ?? '',
+							'key_secret' => $order_info->cardBusiness->channelAccount->key_secret ?? '',
+						];
+
+						$service = new DingxintongService($config);
+
+						// 查询订单
+						$res = $service->query($order_info['out_trade_no']);
+						if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+						{
+							self::sendMessage($chatId, '订单查询失败');
+							exit;
+						}
+
+						$data = [
+							'chat_id' => $chatId,
+							'text' => "订单失败,失败原因:\n" . $res['data']['data'][0]['description'],
+							'reply_to_message_id' => $this->message_data['message']['message_id']
+						];
+						$this->sendForwardTextMessage($data);
+						exit;
+
+						self::sendMessage($chatId, );
 						exit;
 					case 1:
 						//发送回调请求

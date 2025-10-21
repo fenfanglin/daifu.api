@@ -348,6 +348,8 @@ class OrderController extends AuthController
 			return $this->returnError('无法找到信息');
 		}
 
+		$tmp['info'] = json_decode($model->info, true);
+
 		$info = [];
 		$info[] = [
 			'title' => '系统单号',
@@ -439,15 +441,15 @@ class OrderController extends AuthController
 				'class' => 'text-danger bolder',
 			];
 		}
+
+		$agent_commission = floatval($tmp['info']['agent_commission'] ?? 0);
+		$agent_order_fee = floatval($tmp['info']['agent_order_fee'] ?? 0);
+		$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
+
 		$info[] = [
-			'title' => '费用',
-			'value' => $model->status > 0 ? ($model->system_fee + $model->commission) : '',
-			'class' => 'bolder',
-		];
-		$info[] = [
-			'title' => '费率',
-			'value' => $model->status > 0 ? (($model->system_rate * 100) . '%' . ' + ' . $model->commission) : '',
-			'class' => 'bolder',
+			'title' => '代理费用',
+			'value' => $model->status > 0 ? $_fee : '',
+			'class' => '',
 		];
 		if (!empty($model->image_url))
 		{
