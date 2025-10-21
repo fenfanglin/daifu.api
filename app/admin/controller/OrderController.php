@@ -451,6 +451,7 @@ class OrderController extends AuthController
 			'value' => $model->status > 0 ? $_fee : '',
 			'class' => '',
 		];
+
 		if (!empty($model->image_url))
 		{
 			$info[] = [

@@ -10,8 +10,8 @@ use app\model\Order;
 class IndexController extends AuthController
 {
 	/**
-	* 获取前端菜单
-	*/
+	 * 获取前端菜单
+	 */
 	public function get_router()
 	{
 		$role = new BaseRole();
@@ -101,7 +101,9 @@ class IndexController extends AuthController
 		$where = [];
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-		$data['info']['today_fee'] = Order::where($where)->sum('system_fee');
+		$agent_commission = Order::where($where)->sum('agent_commission');
+		$agent_order_fee = Order::where($where)->sum('agent_order_fee');
+		$data['info']['today_fee'] = number_format($agent_commission + $agent_order_fee, 4, '.', '');
 
 		// --------------------------------------------------------------------------
 		// 昨日平台总费用
@@ -109,7 +111,9 @@ class IndexController extends AuthController
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-2 day'))];
 		$where[] = ['success_time', '<', date('Y-m-d')];
-		$data['info']['yesterday_fee'] = Order::where($where)->sum('system_fee');
+		$agent_commission = Order::where($where)->sum('agent_commission');
+		$agent_order_fee = Order::where($where)->sum('agent_order_fee');
+		$data['info']['yesterday_fee'] = number_format($agent_commission + $agent_order_fee, 4, '.', '');
 
 		$this->redis->set($key, $data, getDataCacheTime());
 
@@ -117,9 +121,9 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	* 前端刷新加载一次
-	*/
+	 * 获取账号信息
+	 * 前端刷新加载一次
+	 */
 	public function get_userinfo()
 	{
 		$user = $this->getUser();
@@ -135,9 +139,9 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	* 前端获取当下用户信息
-	*/
+	 * 获取账号信息
+	 * 前端获取当下用户信息
+	 */
 	public function userinfo()
 	{
 		$user = $this->user;
@@ -151,8 +155,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 系统提醒信息
-	*/
+	 * 系统提醒信息
+	 */
 	public function get_notice()
 	{
 		$data = [];
@@ -162,8 +166,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 生成签名
-	*/
+	 * 生成签名
+	 */
 	public function get_sign()
 	{
 		$id = config('oss.accessKeyId');          // 请填写您的AccessKeyId。

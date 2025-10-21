@@ -11,8 +11,8 @@ use app\model\Business;
 class IndexController extends AuthController
 {
 	/**
-	* 获取前端菜单
-	*/
+	 * 获取前端菜单
+	 */
 	public function get_router()
 	{
 		if ($this->user->type == 1) //代理
@@ -46,7 +46,7 @@ class IndexController extends AuthController
 		$num = 1;
 		$num_sql = 6;
 		$use_cache = 0;
-//		\app\model\StatisticsLog::addLog($business_id, $url, $name, $num, $num_sql, $use_cache);
+		//		\app\model\StatisticsLog::addLog($business_id, $url, $name, $num, $num_sql, $use_cache);
 
 
 		$key = 'business_data_index_' . $this->user->id;
@@ -64,21 +64,26 @@ class IndexController extends AuthController
 
 
 		$where_business = [];
-        //类型：1代理 2工作室 3商户
+
+		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
+			$field = 'agent';
 			$where_business[] = ['business_id', '=', $this->user->id];
 		}
 		elseif (in_array($this->user->type, [2]))
 		{
+			$field = 'card';
 			$where_business[] = ['card_business_id', '=', $this->user->id];
 		}
 		elseif (in_array($this->user->type, [3]))
 		{
+			$field = 'business';
 			$where_business[] = ['sub_business_id', '=', $this->user->id];
 		}
 		else
 		{
+			$field = '';
 			$where_business[] = ['id', '=', 0]; //不显示
 		}
 
@@ -115,7 +120,9 @@ class IndexController extends AuthController
 		$where = $where_business;
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-		$data['info']['today_fee'] = Order::where($where)->sum('system_fee');
+		$commission = Order::where($where)->sum("{$field}_commission");
+		$order_fee = Order::where($where)->sum("{$field}_order_fee");
+		$data['info']['today_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 		// --------------------------------------------------------------------------
 		// 昨日平台总费用
@@ -123,7 +130,9 @@ class IndexController extends AuthController
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-2 day'))];
 		$where[] = ['success_time', '<', date('Y-m-d')];
-		$data['info']['yesterday_fee'] = Order::where($where)->sum('system_fee');
+		$commission = Order::where($where)->sum("{$field}_commission");
+		$order_fee = Order::where($where)->sum("{$field}_order_fee");
+		$data['info']['yesterday_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 		$this->redis->set($key, $data, getDataCacheTime());
 
@@ -131,8 +140,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	*/
+	 * 获取账号信息
+	 */
 	public function get_userinfo()
 	{
 		$user = $this->getUser();
@@ -164,9 +173,9 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	* 前端获取当下用户信息
-	*/
+	 * 获取账号信息
+	 * 前端获取当下用户信息
+	 */
 	public function userinfo()
 	{
 		$user = $this->user;
@@ -180,15 +189,15 @@ class IndexController extends AuthController
 		$data['money'] = $user->money;
 		$data['allow_withdraw'] = floatval($user->allow_withdraw);
 		$data['type'] = $user->type;
-        $data['user_type'] = $user->type;
+		$data['user_type'] = $user->type;
 		$data['secret_key'] = $user->secret_key;
 		$data['login_ip'] = $user->login_ip;
-		$data['multiple_login'] = (string)$user->multiple_login;
+		$data['multiple_login'] = (string) $user->multiple_login;
 		$data['random_amount'] = $user->random_amount;
-		$data['usdt_rate_type'] = (string)$user->usdt_rate_type;
+		$data['usdt_rate_type'] = (string) $user->usdt_rate_type;
 		$data['usdt_rate'] = $user->usdt_rate;
-		$data['auth_when_edit_account'] = (string)$user->auth_when_edit_account;
-		$data['remark_when_balance_over'] = (float)$user->remark_when_balance_over;
+		$data['auth_when_edit_account'] = (string) $user->auth_when_edit_account;
+		$data['remark_when_balance_over'] = (float) $user->remark_when_balance_over;
 		$data['verify_status'] = $user->verify_status;
 
 		$data['is_google_auth'] = $user->is_google_auth;
@@ -213,8 +222,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 生成签名
-	*/
+	 * 生成签名
+	 */
 	public function get_sign()
 	{
 		$id = config('oss.accessKeyId');		  // 请填写您的AccessKeyId。
@@ -305,7 +314,8 @@ class IndexController extends AuthController
 		));
 		$response = json_decode(curl_exec($curl), true);
 		curl_close($curl);
-		if (!empty($response['access_token'])) {
+		if (!empty($response['access_token']))
+		{
 			cache('access_token', $response['access_token'], 2590000);
 			return $response['access_token'];
 		}
