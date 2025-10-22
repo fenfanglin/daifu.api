@@ -302,6 +302,10 @@ class OrderController extends AuthController
 				// $data['info']['sql'] = var_dump(Order::getLastSql());
 				// 今日交易笔数
 				$data['info']['today_success_order'] = Order::where($where)->count('id');
+				// 今日总费用
+				$commission = Order::where($where)->sum("business_commission");
+				$order_fee = Order::where($where)->sum("business_order_fee");
+				$data['info']['today_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 				// 今日总笔数
 				$where = [];
