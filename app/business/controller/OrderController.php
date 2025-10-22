@@ -203,6 +203,10 @@ class OrderController extends AuthController
 			$tmp['card_business_realname'] = $model->cardBusiness->realname ?? '';
 			$tmp['image_url'] = $model->image_url;
 
+			$tmp['total_fee'] = $model->business_order_fee + $model->business_commission;
+			// $tmp['business_order_fee'] = $model->business_order_fee;
+			// $tmp['business_commission'] = $model->business_commission;
+			/* $_fee = ($card_commission + $card_order_fee) . "（{$card_commission}固定费用，{$card_order_fee}订单费用）"; */
 
 			$tmp['system_fee'] = 0;
 			$tmp['business_fee'] = 0;
