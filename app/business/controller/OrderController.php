@@ -619,8 +619,8 @@ class OrderController extends AuthController
 		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
-			$agent_commission = floatval($tmp['info']['agent_commission'] ?? 0);
-			$agent_order_fee = floatval($tmp['info']['agent_order_fee'] ?? 0);
+			$agent_commission = floatval($model->agent_commission ?? 0);
+			$agent_order_fee = floatval($model->agent_order_fee ?? 0);
 			$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
 
 			$info[] = [
@@ -631,8 +631,8 @@ class OrderController extends AuthController
 		}
 		elseif (in_array($this->user->type, [2]))
 		{
-			$card_commission = floatval($tmp['info']['card_commission'] ?? 0);
-			$card_order_fee = floatval($tmp['info']['card_order_fee'] ?? 0);
+			$card_commission = floatval($model->card_commission ?? 0);
+			$card_order_fee = floatval($model->card_order_fee ?? 0);
 			$_fee = ($card_commission + $card_order_fee) . "（{$card_commission}固定费用，{$card_order_fee}订单费用）";
 
 			$info[] = [
@@ -643,8 +643,8 @@ class OrderController extends AuthController
 		}
 		elseif (in_array($this->user->type, [3]))
 		{
-			$business_commission = floatval($tmp['info']['business_commission'] ?? 0);
-			$business_order_fee = floatval($tmp['info']['business_order_fee'] ?? 0);
+			$business_commission = floatval($model->business_commission ?? 0);
+			$business_order_fee = floatval($model->business_order_fee ?? 0);
 			$_fee = ($business_commission + $business_order_fee) . "（{$business_commission}固定费用，{$business_order_fee}订单费用）";
 
 			$info[] = [

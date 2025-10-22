@@ -10,10 +10,7 @@ class OrderController extends AuthController
 {
 	private $controller_name = '订单';
 
-	/**
-	 * 列表
-	 */
-	protected function _search($params = [], $is_export = 0)
+	protected function _create_where()
 	{
 		$rule = [
 			'page' => 'integer|min:1',
@@ -21,26 +18,118 @@ class OrderController extends AuthController
 			'status|状态' => 'integer',
 			'out_trade_no|商户订单号' => 'alphaNum',
 			'card_business_id|卡商' => 'integer',
-			// 'success_time|成功时间' => 'dateFormat:Y-m-d H:i:s',
-			// 'create_time|下单时间' => 'dateFormat:Y-m-d H:i:s',
 		];
 
-		if (!$this->validate($params, $rule))
+		if (!$this->validate(input('post.'), $rule))
 		{
-			return $this->returnError($this->getValidateError());
+			Common::error($this->getValidateError());
 		}
 
-		$user = $this->user;
+		$page = intval(input('post.page') ?? 1);
+		$limit = intval(input('post.limit') ?? 10);
+		$min_amount = floatval(input('post.min_amount'));
+		$max_amount = floatval(input('post.max_amount'));
+		$status = intval(input('post.status') ?? NULL);
+		$out_trade_no = input('post.out_trade_no') ?? NULL;
+		$account = input('post.account') ?? NULL;
+		$remark = input('post.remark') ?? NULL;
+		$business_id = intval(input('post.business_id') ?? NULL);
+		$success_time = input('post.success_time') ?? NULL;
+		$create_time = input('post.create_time') ?? NULL;
+		$account_type = input('post.account_type') ?? NULL;
 
-		$page = intval($params['page'] ?? 1);
-		$limit = intval($params['limit'] ?? 10);
-		$status = intval($params['status'] ?? NULL);
-		$business_id = $params['business_id'] ?? NULL;
-		$order_no = $params['order_no'] ?? NULL;
-		$out_trade_no = $params['out_trade_no'] ?? NULL;
-		$success_time = $params['success_time'] ?? NULL;
-		$create_time = $params['create_time'] ?? NULL;
-		$account_type = $params['account_type'] ?? NULL;
+
+		$where = [];
+
+		// if (!empty($keyword))
+		// {
+		// 	$query->where('username|realname', 'like', '%' . $keyword . '%');
+		// }
+		if (!empty($out_trade_no))
+		{
+			$where[] = ['out_trade_no', '=', $out_trade_no];
+		}
+		if (!empty($account))
+		{
+			$where[] = ['account', '=', $account];
+		}
+		if (!empty($business_id))
+		{
+			$where[] = ['business_id', '=', $business_id];
+		}
+
+		if (!empty($status))
+		{
+			$where[] = ['status', '=', $status];
+		}
+		if (!empty($success_time[0]) && $success_time[0] > 0)
+		{
+			$_begin_time_success = date('Y-m-d H:i:s', strtotime($success_time[0]) - 1);
+			$where[] = ['success_time', '>', $_begin_time_success];
+		}
+		if (!empty($success_time[1]) && $success_time[1] > 0)
+		{
+			$_end_time_success = date('Y-m-d H:i:s', strtotime($success_time[1] . ' +1 second'));
+			$where[] = ['success_time', '<', $_end_time_success];
+		}
+		if (!empty($create_time[0]) && $create_time[0] > 0)
+		{
+			$_begin_time_create = date('Y-m-d H:i:s', strtotime($create_time[0]) - 1);
+			$where[] = ['create_time', '>', $_begin_time_create];
+		}
+		if (!empty($create_time[1]) && $create_time[1] > 0)
+		{
+			$_end_time_create = date('Y-m-d H:i:s', strtotime($create_time[1] . ' +1 second'));
+			$where[] = ['create_time', '<', $_end_time_create];
+		}
+		if (!empty($min_amount))
+		{
+			$where[] = ['amount', '>=', $min_amount];
+		}
+		if (!empty($max_amount))
+		{
+			$where[] = ['amount', '<=', $max_amount];
+		}
+		if (!empty($remark))
+		{
+			$where[] = ['remark', '=', $remark];
+		}
+		if (!empty($account_type))
+		{
+			$where[] = ['account_type', '=', $account_type];
+		}
+
+		return $where;
+	}
+
+	/**
+	 * 列表
+	 */
+	protected function _search($is_export = 0)
+	{
+		$page = intval(input('post.page') ?? 1);
+		$limit = intval(input('post.limit') ?? 10);
+		$success_time = input('post.success_time') ?? NULL;
+		$create_time = input('post.create_time') ?? NULL;
+
+		if (!empty($success_time[0]) && $success_time[0] > 0)
+		{
+			$_begin_time_success = date('Y-m-d H:i:s', strtotime($success_time[0]));
+		}
+		if (!empty($success_time[1]) && $success_time[1] > 0)
+		{
+			$_end_time_success = date('Y-m-d H:i:s', strtotime($success_time[1]));
+		}
+		if (!empty($create_time[0]) && $create_time[0] > 0)
+		{
+			$_begin_time_create = date('Y-m-d H:i:s', strtotime($create_time[0]));
+		}
+		if (!empty($create_time[1]) && $create_time[1] > 0)
+		{
+			$_end_time_create = date('Y-m-d H:i:s', strtotime($create_time[1]));
+		}
+
+		$where = $this->_create_where();
 
 		if ($is_export == 1)
 		{
@@ -50,63 +139,17 @@ class OrderController extends AuthController
 
 		$query = Order::field('*');
 
-		// if (!empty($keyword))
-		// {
-		// 	$query->where('username|realname', 'like', '%' . $keyword . '%');
-		// }
-		if (!empty($business_id))
-		{
-			$query->where('business_id', $business_id);
-		}
-		if (!empty($order_no))
-		{
-			$query->where('order_no', $order_no);
-		}
-		if (!empty($account_type))
-		{
-			$query->where('account_type', $account_type);
-		}
-		if (!empty($out_trade_no))
-		{
-			$query->where('out_trade_no', $out_trade_no);
-		}
-		if (!empty($status))
-		{
-			$query->where('status', $status);
-		}
-		if (!empty($success_time[0]) && $success_time[0] > 0)
-		{
-			$_begin_time = date('Y-m-d H:i:s', strtotime($success_time[0]) - 1);
-			$query->where('success_time', '>', $_begin_time);
-		}
-		if (!empty($success_time[1]) && $success_time[1] > 0)
-		{
-			$_end_time = date('Y-m-d H:i:s', strtotime($success_time[1] . ' +1 second'));
-			$query->where('success_time', '<', $_end_time);
-		}
-		if (!empty($create_time[0]) && $create_time[0] > 0)
-		{
-			$_begin_time = date('Y-m-d H:i:s', strtotime($create_time[0]) - 1);
-			$query->where('create_time', '>', $_begin_time);
-		}
-		if (!empty($create_time[1]) && $create_time[1] > 0)
-		{
-			$_end_time = date('Y-m-d H:i:s', strtotime($create_time[1] . ' +1 second'));
-			$query->where('create_time', '<', $_end_time);
-		}
-
-		$query->order('id desc');
+		$query->where($where)->order('id desc');
 
 		$list = $query->paginate([
 			'list_rows' => $limit,
 			'page' => $page,
 		]);
-		$list_business = Business::where('id', '>', 0)->column('realname', 'id');
+
 		$data = [];
 		foreach ($list as $model)
 		{
 			$tmp = [];
-			// $tmp['id'] = $model->id;
 			$tmp['no'] = $model->no;
 			$tmp['order_no'] = $model->order_no;
 			$tmp['out_trade_no'] = $model->out_trade_no;
@@ -148,46 +191,113 @@ class OrderController extends AuthController
 
 		if (!$is_export)
 		{
-			// // $this->redis->set('key', $array);
-			// // $this->redis->get('key');
-			// $key = 'admin_order_statistics';
-			// $this->redis->get($key);
+			$sign = md5(json_encode($where, JSON_UNESCAPED_UNICODE));
+			$key = "admin_data_order_{$sign}";
 
-			$where = [];
-			$where[] = ['status', 'in', [1, 2]];
-			$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-			if (!empty($business_id))
+			if ($_data = $this->redis->get($key) && 0)
 			{
-				$where[] = ['business_id', '=', $business_id];
-			}
-
-			// 今日交易总额
-			$data['info']['today_amount'] = Order::where($where)->sum('amount');
-
-			// 今日交易笔数
-			$data['info']['today_order'] = Order::where($where)->count('id');
-
-			// 今日总笔数
-			$where = [];
-			$where[] = ['create_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-			if (!empty($business_id))
-			{
-				$where[] = ['business_id', '=', $business_id];
-			}
-
-			$data['info']['today_order_total'] = Order::where($where)->count('id');
-
-			// 今日成功率
-			if (!$data['info']['today_order_total'])
-			{
-				$data['info']['today_success_rate'] = 0;
+				$data['info'] = $_data;
 			}
 			else
 			{
-				$data['info']['today_success_rate'] = round($data['info']['today_order'] / ($data['info']['today_order_total']) * 100, 2);
+				if (isset($_begin_time_success) || isset($_begin_time_create))
+				{
+					$data['info']['show_search'] = true;
+
+					// 交易总额
+					$data['info']['success_amount'] = Order::where($where)->where('status', '>', 0)->sum('amount');
+
+					// 交易笔数
+					$data['info']['success_order'] = Order::where($where)->where('status', '>', 0)->count('id');
+
+					// 交易笔数
+					$data['info']['total_order'] = Order::where($where)->count('id');
+
+					// 成功率
+					if (!$data['info']['total_order'])
+					{
+						$data['info']['success_rate'] = 0;
+					}
+					else
+					{
+						$data['info']['success_rate'] = round($data['info']['success_order'] / ($data['info']['total_order']) * 100, 2);
+					}
+				}
+
+
+				$where = [];
+				$where[] = ['status', 'in', [1, 2]];
+				$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
+				if (in_array($this->user->type, [1])) //类型：1代理 2工作室 3商户
+				{
+					$where[] = ['business_id', '=', $this->user->id];
+				}
+				elseif (in_array($this->user->type, [2]))
+				{
+					$where[] = ['card_business_id', '=', $this->user->id];
+				}
+				elseif (in_array($this->user->type, [3]))
+				{
+					$where[] = ['sub_business_id', '=', $this->user->id];
+				}
+				else
+				{
+					$where[] = ['id', '=', 0]; //不显示
+				}
+
+				if (!empty($card_business_id))
+				{
+					$where[] = ['card_business_id', '=', $card_business_id];
+				}
+
+				// 今日交易总额
+				$data['info']['today_success_amount'] = Order::where($where)->sum('amount');
+
+				// 今日交易笔数
+				$data['info']['today_success_order'] = Order::where($where)->count('id');
+
+				// 今日总笔数
+				$where = [];
+				$where[] = ['create_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
+				if (in_array($this->user->type, [1])) //类型：1代理 2工作室 3商户
+				{
+					$where[] = ['business_id', '=', $this->user->id];
+				}
+				elseif (in_array($this->user->type, [2]))
+				{
+					$where[] = ['card_business_id', '=', $this->user->id];
+				}
+				elseif (in_array($this->user->type, [3]))
+				{
+					$where[] = ['sub_business_id', '=', $this->user->id];
+				}
+				else
+				{
+					$where[] = ['id', '=', 0]; //不显示
+				}
+
+				if (!empty($card_business_id))
+				{
+					$where[] = ['card_business_id', '=', $card_business_id];
+				}
+
+				$data['info']['today_total_order'] = Order::where($where)->count('id');
+
+				// 今日成功率
+				if (!$data['info']['today_total_order'])
+				{
+					$data['info']['today_success_rate'] = 0;
+				}
+				else
+				{
+					$data['info']['today_success_rate'] = round($data['info']['today_success_order'] / ($data['info']['today_total_order']) * 100, 2);
+				}
+
+				$_data = $data['info'];
+
+				$this->redis->set($key, $_data, getDataCacheTime());
 			}
 		}
-
 
 		return $data;
 	}
@@ -198,13 +308,9 @@ class OrderController extends AuthController
 	 */
 	public function list()
 	{
-		$params = input('post.');
+		$data = $this->_search();
 
-		$data = $this->_search($params);
-
-		$this->global_redis->set("tb_order_no_x", 1);
-		$this->global_redis->set("tb_order_no_d", 1);
-		return $this->returnData($data, $this->global_redis->smembers("1"));
+		return $this->returnData($data);
 	}
 
 	/**
@@ -242,54 +348,7 @@ class OrderController extends AuthController
 
 		fputcsv($fp, $export_value);
 
-		$where = [];
-		$status = intval(input('post.status') ?? NULL);
-		$out_trade_no = input('post.out_trade_no') ?? NULL;
-		$account = input('post.account') ?? NULL;
-		$business_id = intval(input('post.business_id') ?? NULL);
-		$success_time = input('post.success_time') ?? NULL;
-		$create_time = input('post.create_time') ?? NULL;
-		$account_type = input('post.account_type') ?? NULL;
-		if (!empty($out_trade_no))
-		{
-			$where[] = ['out_trade_no', '=', $out_trade_no];
-		}
-		if (!empty($account))
-		{
-			$where[] = ['account', '=', $account];
-		}
-		if (!empty($business_id))
-		{
-			$where[] = ['business_id', '=', $business_id];
-		}
-		if (!empty($account_type))
-		{
-			$where[] = ['account_type', '=', $account_type];
-		}
-		if (!empty($status))
-		{
-			$where[] = ['status', '=', $status];
-		}
-		if (!empty($success_time[0]) && $success_time[0] > 0)
-		{
-			$_begin_time_success = date('Y-m-d H:i:s', strtotime($success_time[0]) - 1);
-			$where[] = ['success_time', '>', $_begin_time_success];
-		}
-		if (!empty($success_time[1]) && $success_time[1] > 0)
-		{
-			$_end_time_success = date('Y-m-d H:i:s', strtotime($success_time[1] . ' +1 second'));
-			$where[] = ['success_time', '<', $_end_time_success];
-		}
-		if (!empty($create_time[0]) && $create_time[0] > 0)
-		{
-			$_begin_time_create = date('Y-m-d H:i:s', strtotime($create_time[0]) - 1);
-			$where[] = ['create_time', '>', $_begin_time_create];
-		}
-		if (!empty($create_time[1]) && $create_time[1] > 0)
-		{
-			$_end_time_create = date('Y-m-d H:i:s', strtotime($create_time[1] . ' +1 second'));
-			$where[] = ['create_time', '<', $_end_time_create];
-		}
+		$where = $this->_create_where();
 
 
 		$status_str = [-1 => '未支付', 1 => '成功，未回调', 2 => '成功，已回调', -2 => '生成订单失败'];
@@ -442,8 +501,8 @@ class OrderController extends AuthController
 			];
 		}
 
-		$agent_commission = floatval($tmp['info']['agent_commission'] ?? 0);
-		$agent_order_fee = floatval($tmp['info']['agent_order_fee'] ?? 0);
+		$agent_commission = floatval($model->agent_commission ?? 0);
+		$agent_order_fee = floatval($model->agent_order_fee ?? 0);
 		$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
 
 		$info[] = [
