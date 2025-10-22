@@ -295,7 +295,7 @@ class OrderController extends AuthController
 
 				// 今日交易总额
 				$data['info']['today_success_amount'] = Order::where($where)->sum('amount');
-
+				// $data['info']['sql'] = var_dump(Order::getLastSql());
 				// 今日交易笔数
 				$data['info']['today_success_order'] = Order::where($where)->count('id');
 
