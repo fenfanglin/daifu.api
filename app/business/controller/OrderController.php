@@ -202,11 +202,7 @@ class OrderController extends AuthController
 			$tmp['card_business_id'] = $model->card_business_id;
 			$tmp['card_business_realname'] = $model->cardBusiness->realname ?? '';
 			$tmp['image_url'] = $model->image_url;
-
 			$tmp['total_fee'] = $model->business_order_fee + $model->business_commission;
-			// $tmp['business_order_fee'] = $model->business_order_fee;
-			// $tmp['business_commission'] = $model->business_commission;
-			/* $_fee = ($card_commission + $card_order_fee) . "（{$card_commission}固定费用，{$card_order_fee}订单费用）"; */
 
 			$tmp['system_fee'] = 0;
 			$tmp['business_fee'] = 0;
@@ -410,9 +406,11 @@ class OrderController extends AuthController
 				'amount' => '交易金额',
 				'usdt_amount' => 'Usdt金额',
 				'account' => '账号',
-				'system_fee' => '系统费用',
-				'business_rate' => '订单费率',
-				'allow_withdraw' => '可提现金额',
+				'account_name' => '账号名称',
+				'business_commission' => '固定订单费用',
+				'business_order_fee' => '订单手续费',
+				// 'business_rate' => '订单费率',
+				// 'allow_withdraw' => '可提现金额',
 				'create_time' => '下单时间',
 				'success_time' => '成功时间',
 				'status' => '状态',
@@ -461,10 +459,18 @@ class OrderController extends AuthController
 					isset($v['system_rate']) && $v['system_rate'] = $v['system_rate'] . '% + ' . $v['commission'];
 					unset($v['commission']);
 				}
+
+				if ($v['status'] != 2)
+				{
+					$v['business_commission'] = 0;
+					$v['business_order_fee'] = 0;
+				}
+
 				$v['account'] = $v['account'] . "\t";
 				$v['out_trade_no'] = $v['out_trade_no'] . "\t";
 				$v['status'] = $status_str[$v['status']] ?? '';
 				$v['account_type'] = listAccountType()[$v['account_type']] ?? '';
+
 				fputcsv($fp, $v);
 			}
 		}
