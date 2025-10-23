@@ -631,11 +631,15 @@ class OrderController extends AuthController
 		{
 			$agent_commission = floatval($model->agent_commission ?? 0);
 			$agent_order_fee = floatval($model->agent_order_fee ?? 0);
-			$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
 
 			$info[] = [
 				'title' => '代理费用',
-				'value' => $model->status > 0 ? $_fee : '',
+				'value' => $model->status > 0 ? $agent_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $agent_commission : '',
 				'class' => '',
 			];
 		}
@@ -643,11 +647,15 @@ class OrderController extends AuthController
 		{
 			$card_commission = floatval($model->card_commission ?? 0);
 			$card_order_fee = floatval($model->card_order_fee ?? 0);
-			$_fee = ($card_commission + $card_order_fee) . "（{$card_commission}固定费用，{$card_order_fee}订单费用）";
 
 			$info[] = [
 				'title' => '工作室费用',
-				'value' => $model->status > 0 ? $_fee : '',
+				'value' => $model->status > 0 ? $card_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $card_commission : '',
 				'class' => '',
 			];
 		}
@@ -655,11 +663,15 @@ class OrderController extends AuthController
 		{
 			$business_commission = floatval($model->business_commission ?? 0);
 			$business_order_fee = floatval($model->business_order_fee ?? 0);
-			$_fee = ($business_commission + $business_order_fee) . "（{$business_commission}固定费用，{$business_order_fee}订单费用）";
 
 			$info[] = [
 				'title' => '商户费用',
-				'value' => $model->status > 0 ? $_fee : '',
+				'value' => $model->status > 0 ? $business_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $business_commission : '',
 				'class' => '',
 			];
 		}

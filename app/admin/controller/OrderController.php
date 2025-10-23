@@ -228,26 +228,9 @@ class OrderController extends AuthController
 				$where = [];
 				$where[] = ['status', 'in', [1, 2]];
 				$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-				if (in_array($this->user->type, [1])) //类型：1代理 2工作室 3商户
+				if (!empty($business_id))
 				{
-					$where[] = ['business_id', '=', $this->user->id];
-				}
-				elseif (in_array($this->user->type, [2]))
-				{
-					$where[] = ['card_business_id', '=', $this->user->id];
-				}
-				elseif (in_array($this->user->type, [3]))
-				{
-					$where[] = ['sub_business_id', '=', $this->user->id];
-				}
-				else
-				{
-					$where[] = ['id', '=', 0]; //不显示
-				}
-
-				if (!empty($card_business_id))
-				{
-					$where[] = ['card_business_id', '=', $card_business_id];
+					$where[] = ['business_id', '=', $business_id];
 				}
 
 				// 今日交易总额
@@ -259,26 +242,9 @@ class OrderController extends AuthController
 				// 今日总笔数
 				$where = [];
 				$where[] = ['create_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-				if (in_array($this->user->type, [1])) //类型：1代理 2工作室 3商户
+				if (!empty($business_id))
 				{
-					$where[] = ['business_id', '=', $this->user->id];
-				}
-				elseif (in_array($this->user->type, [2]))
-				{
-					$where[] = ['card_business_id', '=', $this->user->id];
-				}
-				elseif (in_array($this->user->type, [3]))
-				{
-					$where[] = ['sub_business_id', '=', $this->user->id];
-				}
-				else
-				{
-					$where[] = ['id', '=', 0]; //不显示
-				}
-
-				if (!empty($card_business_id))
-				{
-					$where[] = ['card_business_id', '=', $card_business_id];
+					$where[] = ['business_id', '=', $business_id];
 				}
 
 				$data['info']['today_total_order'] = Order::where($where)->count('id');
@@ -503,11 +469,15 @@ class OrderController extends AuthController
 
 		$agent_commission = floatval($model->agent_commission ?? 0);
 		$agent_order_fee = floatval($model->agent_order_fee ?? 0);
-		$_fee = ($agent_commission + $agent_order_fee) . "（{$agent_commission}固定费用，{$agent_order_fee}订单费用）";
 
 		$info[] = [
-			'title' => '代理费用',
-			'value' => $model->status > 0 ? $_fee : '',
+			'title' => '代理订单费用',
+			'value' => $model->status > 0 ? $agent_order_fee : '',
+			'class' => '',
+		];
+		$info[] = [
+			'title' => '固定费用',
+			'value' => $model->status > 0 ? $agent_commission : '',
 			'class' => '',
 		];
 
