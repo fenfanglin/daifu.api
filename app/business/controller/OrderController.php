@@ -202,6 +202,8 @@ class OrderController extends AuthController
 			$tmp['card_business_id'] = $model->card_business_id;
 			$tmp['card_business_realname'] = $model->cardBusiness->realname ?? '';
 			$tmp['image_url'] = $model->image_url;
+			$tmp['business_order_fee'] = $model->business_order_fee;
+			$tmp['business_commission'] = $model->business_commission;
 			$tmp['total_fee'] = $model->business_order_fee + $model->business_commission;
 
 			$tmp['system_fee'] = 0;
@@ -249,6 +251,10 @@ class OrderController extends AuthController
 
 					// 交易总额
 					$data['info']['success_amount'] = Order::where($where)->where('status', '>', 0)->sum('amount');
+					// 订单费用
+					$commission = Order::where($where)->where('status', '>', 0)->sum("business_commission");
+					$order_fee = Order::where($where)->where('status', '>', 0)->sum("business_order_fee");
+					$data['info']['success_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 					// 交易笔数
 					$data['info']['success_order'] = Order::where($where)->where('status', '>', 0)->count('id');
