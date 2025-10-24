@@ -635,49 +635,40 @@ class OrderController extends AuthController
 		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
-			$agent_commission = floatval($model->agent_commission ?? 0);
-			$agent_order_fee = floatval($model->agent_order_fee ?? 0);
-
 			$info[] = [
-				'title' => '代理费用',
-				'value' => $model->status > 0 ? $agent_order_fee : '',
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->agent_order_fee : '',
 				'class' => '',
 			];
 			$info[] = [
 				'title' => '固定费用',
-				'value' => $model->status > 0 ? $agent_commission : '',
+				'value' => $model->status > 0 ? $model->agent_commission : '',
 				'class' => '',
 			];
 		}
 		elseif (in_array($this->user->type, [2]))
 		{
-			$card_commission = floatval($model->card_commission ?? 0);
-			$card_order_fee = floatval($model->card_order_fee ?? 0);
-
 			$info[] = [
-				'title' => '工作室费用',
-				'value' => $model->status > 0 ? $card_order_fee : '',
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->card_order_fee : '',
 				'class' => '',
 			];
 			$info[] = [
 				'title' => '固定费用',
-				'value' => $model->status > 0 ? $card_commission : '',
+				'value' => $model->status > 0 ? $model->card_commission : '',
 				'class' => '',
 			];
 		}
 		elseif (in_array($this->user->type, [3]))
 		{
-			$business_commission = floatval($model->business_commission ?? 0);
-			$business_order_fee = floatval($model->business_order_fee ?? 0);
-
 			$info[] = [
-				'title' => '商户费用',
-				'value' => $model->status > 0 ? $business_order_fee : '',
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->business_order_fee : '',
 				'class' => '',
 			];
 			$info[] = [
 				'title' => '固定费用',
-				'value' => $model->status > 0 ? $business_commission : '',
+				'value' => $model->status > 0 ? $model->business_commission : '',
 				'class' => '',
 			];
 		}

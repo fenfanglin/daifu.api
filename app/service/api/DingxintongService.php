@@ -311,6 +311,8 @@ class DingxintongService
 	 */
 	function httpPost($url, $data)
 	{
+		$begin = microtime(true);
+
 		$curl = curl_init();
 
 		curl_setopt_array($curl, [
@@ -331,9 +333,13 @@ class DingxintongService
 
 		curl_close($curl);
 
+		$end = microtime(true);
+		$time = round($end - $begin, 4) . 's';
+
 		Common::writeLog([
 			'url' => $url,
 			'data' => $data,
+			'time' => $time,
 			'res' => json_decode($res, true) ?? $res,
 		], 'DingxintongService_httpPost');
 
