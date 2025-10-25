@@ -682,7 +682,7 @@ class BotGetMessageService
 			switch ($model->type)
 			{
 				case 1:
-					$recharge = $money_log->where('business_id', $model->id)->Where('type', 4)->sum('money');
+					$recharge = $money_log->where('business_id', $model->id)->Where('type', 4)->where('create_time', '>', date('Y-m-d 00:00:00'))->sum('money');
 					$where = [];
 					$where[] = ['business_id', '=', $model->id];
 					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
@@ -696,7 +696,7 @@ class BotGetMessageService
 						'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
 				case 2:
-					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->sum('money');
+					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->where('create_time', '>', date('Y-m-d 00:00:00'))->sum('money');
 					$where = [];
 					$where[] = ['sub_business_id', '=', $model->id];
 					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
@@ -710,7 +710,7 @@ class BotGetMessageService
 						'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
 				case 3:
-					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->sum('money');
+					$recharge = $money_log->where('sub_business_id', $model->id)->Where('type', 4)->where('create_time', '>', date('Y-m-d 00:00:00'))->sum('money');
 					$where = [];
 					$where[] = ['sub_business_id', '=', $model->id];
 					$where[] = ['create_time', '>', date('Y-m-d 00:00:00')];
