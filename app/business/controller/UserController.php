@@ -3,6 +3,8 @@ namespace app\business\controller;
 
 use app\extend\common\Common;
 use app\extend\auth\GoogleAuthenticator;
+use app\model\BusinessChannel;
+
 
 class UserController extends AuthController
 {
@@ -391,5 +393,91 @@ class UserController extends AuthController
 		];
 
 		return $this->returnData($data);
+	}
+
+	/**
+	 * 查看通道设置
+	 */
+	public function channel_setting_view()
+	{
+		// 类型：1代理 2工作室 3商户
+		if (!in_array($this->user->type, [1]))
+		{
+			Common::error('此功能不开放给商户');
+		}
+
+		$rule = [
+			'channel_id|通道id' => 'require|integer|>:0',
+		];
+
+		if (!$this->validate(input('post.'), $rule))
+		{
+			return $this->returnError($this->getValidateError());
+		}
+
+		$business_channel = \app\model\BusinessChannel::where(['business_id' => $this->user->id, 'channel_id' => input('post.channel_id')])->find();
+		if (!$business_channel)
+		{
+			return $this->returnError('无法找到信息');
+		}
+
+		$data = [];
+		$data['execute_time_limit'] = $business_channel->execute_time_limit;
+		$data['status'] = (string) $business_channel->status;
+
+		// 关闭商户拉黑功能
+		if ($this->user->block_order == -1)
+		{
+			$data['blacklist_disabled'] = true;
+			$data['block_order'] = '-1';
+			$data['refund_order'] = '-1';
+		}
+
+		return $this->returnData($data);
+	}
+
+	/**
+	 * 修改通道设置
+	 */
+	public function channel_setting_save()
+	{
+		// 类型：1代理 2工作室 3商户
+		if (!in_array($this->user->type, [1, 3]))
+		{
+			Common::error('此功能不开放给商户');
+		}
+
+		$rule = [
+			'channel_id|通道id' => 'require|integer|>:0',
+		];
+
+		if (!$this->validate(input('post.'), $rule))
+		{
+			return $this->returnError($this->getValidateError());
+		}
+
+		$business_channel = \app\model\BusinessChannel::where(['business_id' => $this->user->id, 'channel_id' => input('post.channel_id')])->find();
+		if (!$business_channel)
+		{
+			return $this->returnError('无法找到信息');
+		}
+
+		// if ($business_channel->business_id != $this->user->id)
+		// {
+		// 	return $this->returnError('信息不属于商户');
+		// }
+		$post = input('post.');
+
+		$business_channel->execute_time_limit = isset($post['execute_time_limit']) ? $post['execute_time_limit'] : $business_channel->execute_time_limit;
+		$business_channel->status = isset($post['status']) ? $post['status'] : $business_channel->status;
+
+		if (!$business_channel->save())
+		{
+			return $this->returnError('保存失败');
+		}
+
+		$this->writeLog("修改通道设置：{$business_channel->channel->name}");
+
+		return $this->returnSuccess('成功');
 	}
 }

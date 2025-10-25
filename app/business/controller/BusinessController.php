@@ -8,6 +8,8 @@ use app\model\BusinessMoneyLog;
 use app\model\BusinessChannel;
 use app\model\Channel;
 use app\model\ChannelAccount;
+use app\model\Order;
+
 
 class BusinessController extends AuthController
 {
@@ -109,6 +111,20 @@ class BusinessController extends AuthController
 			$tmp['update_time'] = $model->update_time;
 			$tmp['order_rate'] = (string) $model->order_rate;
 			$tmp['commission'] = (string) $model->commission;
+
+			// 今日总费用
+			$where = [];
+			$where[] = ['status', 'in', [1, 2]];
+			$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
+			// $where[] = ['success_time', '>', date('2025-10-22 23:59:59', strtotime('-1 day'))];
+			$where[] = ['sub_business_id', '=', $model->id];
+			$commission = Order::where($where)->sum("business_commission");
+			// $tmp['sql'] = var_dump(Order::getLastSql());
+
+			$order_fee = Order::where($where)->sum("business_order_fee");
+			$tmp['commission'] = $commission;
+			$tmp['order_fee'] = $order_fee;
+			$tmp['day_total_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 			$tmp['status_str'] = isset(Business::STATUS[$model->status]) ? Business::STATUS[$model->status] : '';
 			$tmp['card_type_str'] = $model->card_type == 1 ? '人工支付' : '三方转账';

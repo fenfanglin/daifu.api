@@ -206,6 +206,9 @@ return [
 					'white_list' => [
 						'channel_shundatong:list',
 						'channel_shundatong:view',
+						'user:channel_setting_view',
+						'user:channel_setting_save',
+						'user:channel_setting_del',
 					],
 					'permission' => [
 						'channel_shundatong:save:add' => '添加',
@@ -222,6 +225,9 @@ return [
 					'white_list' => [
 						'channel_dingxintong:list',
 						'channel_dingxintong:view',
+						'user:channel_setting_view',
+						'user:channel_setting_save',
+						'user:channel_setting_del',
 					],
 					'permission' => [
 						'channel_dingxintong:save:add' => '添加',
