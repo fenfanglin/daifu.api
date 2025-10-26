@@ -101,7 +101,9 @@ class IndexController extends AuthController
 		$where = [];
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-		$data['info']['today_fee'] = Order::where($where)->sum('system_fee');
+		$agent_commission = Order::where($where)->sum('agent_commission');
+		$agent_order_fee = Order::where($where)->sum('agent_order_fee');
+		$data['info']['today_fee'] = number_format($agent_commission + $agent_order_fee, 4, '.', '');
 
 		// --------------------------------------------------------------------------
 		// 昨日平台总费用
@@ -109,7 +111,9 @@ class IndexController extends AuthController
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-2 day'))];
 		$where[] = ['success_time', '<', date('Y-m-d')];
-		$data['info']['yesterday_fee'] = Order::where($where)->sum('system_fee');
+		$agent_commission = Order::where($where)->sum('agent_commission');
+		$agent_order_fee = Order::where($where)->sum('agent_order_fee');
+		$data['info']['yesterday_fee'] = number_format($agent_commission + $agent_order_fee, 4, '.', '');
 
 		$this->redis->set($key, $data, getDataCacheTime());
 

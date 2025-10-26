@@ -132,6 +132,26 @@ class OrderController extends AuthController
 	{
 		$page = intval(input('post.page') ?? 1);
 		$limit = intval(input('post.limit') ?? 10);
+		$success_time = input('post.success_time') ?? NULL;
+		$create_time = input('post.create_time') ?? NULL;
+
+		if (!empty($success_time[0]) && $success_time[0] > 0)
+		{
+			$_begin_time_success = date('Y-m-d H:i:s', strtotime($success_time[0]));
+		}
+		if (!empty($success_time[1]) && $success_time[1] > 0)
+		{
+			$_end_time_success = date('Y-m-d H:i:s', strtotime($success_time[1]));
+		}
+		if (!empty($create_time[0]) && $create_time[0] > 0)
+		{
+			$_begin_time_create = date('Y-m-d H:i:s', strtotime($create_time[0]));
+		}
+		if (!empty($create_time[1]) && $create_time[1] > 0)
+		{
+			$_end_time_create = date('Y-m-d H:i:s', strtotime($create_time[1]));
+		}
+
 		$where = $this->_create_where();
 
 		if ($is_export == 1)
@@ -182,7 +202,9 @@ class OrderController extends AuthController
 			$tmp['card_business_id'] = $model->card_business_id;
 			$tmp['card_business_realname'] = $model->cardBusiness->realname ?? '';
 			$tmp['image_url'] = $model->image_url;
-
+			$tmp['business_order_fee'] = $model->business_order_fee;
+			$tmp['business_commission'] = $model->business_commission;
+			$tmp['total_fee'] = $model->business_order_fee + $model->business_commission;
 
 			$tmp['system_fee'] = 0;
 			$tmp['business_fee'] = 0;
@@ -213,24 +235,12 @@ class OrderController extends AuthController
 		if (!$is_export)
 		{
 			$business_id = $this->user->id;
-			$url = 'order/list';
-			$name = '订单列表';
-			$num = 1;
-			$num_sql = 0;
-			$use_cache = 0;
 
 			$sign = md5(json_encode($where, JSON_UNESCAPED_UNICODE));
 			$key = "business_data_order_{$business_id}_{$sign}";
 
-			if ($_data = $this->redis->get($key))
+			if ($_data = $this->redis->get($key) && 0)
 			{
-				$use_cache = 1;
-
-				if (isset($_begin_time_success) || isset($_begin_time_create))
-				{
-					$num_sql += 3;
-				}
-
 				$data['info'] = $_data;
 			}
 			else
@@ -241,6 +251,10 @@ class OrderController extends AuthController
 
 					// 交易总额
 					$data['info']['success_amount'] = Order::where($where)->where('status', '>', 0)->sum('amount');
+					// 订单费用
+					$commission = Order::where($where)->where('status', '>', 0)->sum("business_commission");
+					$order_fee = Order::where($where)->where('status', '>', 0)->sum("business_order_fee");
+					$data['info']['success_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 					// 交易笔数
 					$data['info']['success_order'] = Order::where($where)->where('status', '>', 0)->count('id');
@@ -257,8 +271,6 @@ class OrderController extends AuthController
 					{
 						$data['info']['success_rate'] = round($data['info']['success_order'] / ($data['info']['total_order']) * 100, 2);
 					}
-
-					$num_sql += 3;
 				}
 
 
@@ -289,9 +301,13 @@ class OrderController extends AuthController
 
 				// 今日交易总额
 				$data['info']['today_success_amount'] = Order::where($where)->sum('amount');
-
+				// $data['info']['sql'] = var_dump(Order::getLastSql());
 				// 今日交易笔数
 				$data['info']['today_success_order'] = Order::where($where)->count('id');
+				// 今日总费用
+				$commission = Order::where($where)->sum("business_commission");
+				$order_fee = Order::where($where)->sum("business_order_fee");
+				$data['info']['today_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 				// 今日总笔数
 				$where = [];
@@ -334,8 +350,6 @@ class OrderController extends AuthController
 
 				$this->redis->set($key, $_data, getDataCacheTime());
 			}
-
-			$num_sql += 3;
 		}
 
 		return $data;
@@ -402,9 +416,11 @@ class OrderController extends AuthController
 				'amount' => '交易金额',
 				'usdt_amount' => 'Usdt金额',
 				'account' => '账号',
-				'system_fee' => '系统费用',
-				'business_rate' => '订单费率',
-				'allow_withdraw' => '可提现金额',
+				'account_name' => '账号名称',
+				'business_commission' => '固定订单费用',
+				'business_order_fee' => '订单手续费',
+				// 'business_rate' => '订单费率',
+				// 'allow_withdraw' => '可提现金额',
 				'create_time' => '下单时间',
 				'success_time' => '成功时间',
 				'status' => '状态',
@@ -453,10 +469,18 @@ class OrderController extends AuthController
 					isset($v['system_rate']) && $v['system_rate'] = $v['system_rate'] . '% + ' . $v['commission'];
 					unset($v['commission']);
 				}
+
+				if ($v['status'] != 2)
+				{
+					$v['business_commission'] = 0;
+					$v['business_order_fee'] = 0;
+				}
+
 				$v['account'] = $v['account'] . "\t";
 				$v['out_trade_no'] = $v['out_trade_no'] . "\t";
 				$v['status'] = $status_str[$v['status']] ?? '';
 				$v['account_type'] = listAccountType()[$v['account_type']] ?? '';
+
 				fputcsv($fp, $v);
 			}
 		}
@@ -567,12 +591,12 @@ class OrderController extends AuthController
 			$info[] = [
 				'title' => 'Usdt汇率',
 				'value' => $model->usdt_rate,
-				'class' => 'text-warning bolder',
+				'class' => '',
 			];
 			$info[] = [
 				'title' => 'Usdt金额',
 				'value' => $model->usdt_amount,
-				'class' => 'text-success bolder',
+				'class' => '',
 			];
 		}
 		elseif ($model->account_type == 3) //支付宝
@@ -608,29 +632,47 @@ class OrderController extends AuthController
 			];
 		}
 
-
+		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
 			$info[] = [
-				'title' => '费用',
-				'value' => $model->status > 0 ? ($model->system_fee + $model->commission) : '',
-				'class' => 'bolder',
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->agent_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $model->agent_commission : '',
+				'class' => '',
+			];
+		}
+		elseif (in_array($this->user->type, [2]))
+		{
+			$info[] = [
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->card_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $model->card_commission : '',
+				'class' => '',
+			];
+		}
+		elseif (in_array($this->user->type, [3]))
+		{
+			$info[] = [
+				'title' => '订单费用',
+				'value' => $model->status > 0 ? $model->business_order_fee : '',
+				'class' => '',
+			];
+			$info[] = [
+				'title' => '固定费用',
+				'value' => $model->status > 0 ? $model->business_commission : '',
+				'class' => '',
 			];
 		}
 
-		if (in_array($this->user->type, [3])) //类型：1代理 2工作室 3商户
-		{
-			$info[] = [
-				'title' => '费用',
-				'value' => $model->status > 0 ? $model->business_fee : '',
-				'class' => 'bolder',
-			];
-			$info[] = [
-				'title' => '可提现金额',
-				'value' => $model->status > 0 ? $model->allow_withdraw : '',
-				'class' => 'bolder',
-			];
-		}
 		if (!empty($model->image_url))
 		{
 			$info[] = [

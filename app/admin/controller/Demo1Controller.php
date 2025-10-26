@@ -11,7 +11,7 @@ class Demo1Controller extends BaseController
 		$config = [
 			'mchid' => 'M1759755553',
 			'appid' => '68e3bd22e4b02b5ff8bc1d63',
-			'key_secret' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
+			'key' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
 		];
 
 		$service = new \app\service\api\ShundatongService($config);
@@ -31,7 +31,7 @@ class Demo1Controller extends BaseController
 		$config = [
 			'mchid' => 'M1759755553',
 			'appid' => '68e3bd22e4b02b5ff8bc1d63',
-			'key_secret' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
+			'key' => 'ppp42ij2dzzbd5kx1bevv0m15mx8lvtchwqvoweu5u55qonrgvf8sp4d8q448k5ve8bxm2bhej6dmk8jffazipkhj62zaftac81ted7lfg5zt36gjzyrvzz6kunzac46',
 		];
 
 		$service = new \app\service\api\ShundatongService($config);
@@ -89,7 +89,7 @@ class Demo1Controller extends BaseController
 		dd($res);
 	}
 
-	public function bill_url2()
+	public function bill_url1()
 	{
 		$config = [
 			'mchid' => '1977392152004120577',
@@ -106,5 +106,104 @@ class Demo1Controller extends BaseController
 		$res = $service->bill_url($order_id, $order_no);
 
 		dd($res);
+	}
+
+	public function bill_url2()
+	{
+		$ip = $_SERVER['REMOTE_ADDR']; // 默认使用 REMOTE_ADDR (可能是 8.219.0.224)
+
+		// 优先级高的可信头（针对阿里云 CDN）
+		$trustedHeaders = [
+			'HTTP_ALI_CDN_REAL_IP',     // 阿里云 CDN 真实 IP
+			'HTTP_CF_CONNECTING_IP',    // Cloudflare（备用）
+			'HTTP_X_FORWARDED_FOR',     // 通用代理头，取第一个 IP
+		];
+
+		foreach ($trustedHeaders as $key)
+		{
+			if (!empty($_SERVER[$key]))
+			{
+				if ($key === 'HTTP_X_FORWARDED_FOR')
+				{
+					$proxyIps = explode(',', $_SERVER[$key]);
+					$ip = trim($proxyIps[0]); // 取第一个 IP 作为客户端 IP
+				}
+				else
+				{
+					$ip = trim($_SERVER[$key]);
+				}
+				break;
+			}
+		}
+		dump($ip);
+		die;
+		$config = [
+			'mchid' => '1977392152004120577',
+			'appid' => '2021004124686129',
+			'key_id' => 'IJ0CDFUTHRT38OGYXDESNLBJ',
+			'key_secret' => 'HBMW3SLAHI8R5DZXP6HYW60NWWOJUY',
+		];
+
+		$service = new \app\service\api\DingxintongService($config);
+
+		$order_id = '1978497723880468482';
+		$order_no = '202510160746528524';
+
+		$res = $service->bill_url($order_id, $order_no);
+		dump($res);
+		die;
+		$alipayUrl = $res['data']['data']; // 你的完整URL
+
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+			CURLOPT_URL => $alipayUrl,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_SSL_VERIFYPEER => false
+		]);
+		$pdfContent = curl_exec($ch);
+		file_put_contents($order_no . '.pdf', $pdfContent);
+		echo file_exists($order_no . '.pdf') ? '✅ 下载成功！' : '❌ 下载失败';
+		dd($res);
+	}
+
+	public function update_fee()
+	{
+		$order_id = intval(input('get.order_id')) ?? 0;
+
+		$where = [];
+		$where[] = ['id', '>', $order_id];
+
+		$list = \app\model\Order::where($where)->limit(100)->order('id asc')->select();
+
+		if (count($list) == 0)
+		{
+			dd('END');
+		}
+
+		foreach ($list as $order)
+		{
+			$info = json_decode($order->info, true);
+			if (isset($info['agent_commission']))
+			{
+				$order->agent_commission = $info['agent_commission'] ?? 0;
+				$order->agent_order_rate = $info['agent_order_rate'] ?? 0;
+				$order->agent_order_fee = $info['agent_order_fee'] ?? 0;
+				$order->card_commission = $info['card_commission'] ?? 0;
+				$order->card_order_rate = $info['card_order_rate'] ?? 0;
+				$order->card_order_fee = $info['card_order_fee'] ?? 0;
+				$order->business_commission = $info['business_commission'] ?? 0;
+				$order->business_order_rate = $info['business_order_rate'] ?? 0;
+				$order->business_order_fee = $info['business_order_fee'] ?? 0;
+
+				$order->save();
+			}
+		}
+
+		// echo "<script>window.setTimeout(\"window.location.reload(true);\", 5000);</script>";
+
+		echo "<script>window.setTimeout(\"window.location.href='?order_id={$order->id}';\", 1000);</script>";
+
+		dd("num = " . count($list), "last_id = {$order->id}");
 	}
 }

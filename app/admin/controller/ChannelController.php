@@ -12,7 +12,7 @@ class ChannelController extends AuthController
 	 * 列表
 	 */
 	protected function _search($params = [], $is_export = 0)
-	{	
+	{
 		$rule = [
 			'page' => 'integer|min:1',
 			'limit' => 'integer',
@@ -91,6 +91,8 @@ class ChannelController extends AuthController
 			$tmp['rate'] = $model->rate;
 			$tmp['create_time'] = $model->create_time;
 			$tmp['update_time'] = $model->update_time;
+			$tmp['request_api_sleep'] = $model->request_api_sleep;
+			$tmp['execute_loop_sleep'] = $model->execute_loop_sleep;
 
 			$tmp['status_str'] = isset(Channel::STATUS[$model->status]) ? Channel::STATUS[$model->status] : '';
 			$tmp['status_class'] = isset(Channel::STATUS_CLASS[$model->status]) ? Channel::STATUS_CLASS[$model->status] : '';
@@ -242,6 +244,8 @@ class ChannelController extends AuthController
 		$model->code = input('post.code');
 		$model->rate = input('post.rate');
 		$model->type = input('post.type');
+		$model->request_api_sleep = input('post.request_api_sleep');
+		$model->execute_loop_sleep = input('post.execute_loop_sleep');
 		$model->status = intval(input('post.status'));
 		$model->block_order = intval(input('post.block_order'));
 		$model->refund_order = intval(input('post.refund_order'));

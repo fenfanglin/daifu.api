@@ -113,6 +113,8 @@ class ChannelShundatongController extends AuthController
 			$tmp['remark'] = $model->remark;
 			$tmp['create_time'] = $model->create_time;
 			$tmp['update_time'] = $model->update_time;
+			$tmp['order_num'] = $model->order_num;
+
 
 			$tmp['status_str'] = ChannelAccount::STATUS[$model->status] ?? '';
 			$tmp['status_class'] = ChannelAccount::STATUS_CLASS[$model->status] ?? '';
@@ -239,7 +241,16 @@ class ChannelShundatongController extends AuthController
 		{
 			$data['list'] = [];
 		}
+		// 待处理订单数
+		$where = [];
+		$where[] = ['business_id', '=', $this->user->id];
+		$data['info']['order_wating'] = Order::where($where)->where('api_status', '=', -1)->count('id');
 
+		// $data['info']['sql'] = var_dump(Order::getLastSql());
+		//  正在处理订单数
+		$where[] = ['api_status', '=', 1];
+		$where[] = ['status', '=', -1];
+		$data['info']['order_doing'] = Order::where($where)->count('id');
 		// if (config('es.is_active') == true)
 		// {
 		// 	$sign = md5(json_encode($channel_account_ids));
@@ -415,6 +426,8 @@ class ChannelShundatongController extends AuthController
 		$model->key_secret = input('post.key_secret');
 		$model->remark = input('post.remark');
 		$model->status = intval(input('post.status'));
+		$model->card_business_id = intval(input('post.card_business_id'));
+
 
 		if (!$model->save())
 		{

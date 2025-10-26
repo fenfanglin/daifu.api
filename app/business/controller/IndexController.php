@@ -67,18 +67,22 @@ class IndexController extends AuthController
 		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{
+			$field = 'agent';
 			$where_business[] = ['business_id', '=', $this->user->id];
 		}
 		elseif (in_array($this->user->type, [2]))
 		{
+			$field = 'card';
 			$where_business[] = ['card_business_id', '=', $this->user->id];
 		}
 		elseif (in_array($this->user->type, [3]))
 		{
+			$field = 'business';
 			$where_business[] = ['sub_business_id', '=', $this->user->id];
 		}
 		else
 		{
+			$field = '';
 			$where_business[] = ['id', '=', 0]; //不显示
 		}
 
@@ -115,7 +119,9 @@ class IndexController extends AuthController
 		$where = $where_business;
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-1 day'))];
-		$data['info']['today_fee'] = Order::where($where)->sum('system_fee');
+		$commission = Order::where($where)->sum("{$field}_commission");
+		$order_fee = Order::where($where)->sum("{$field}_order_fee");
+		$data['info']['today_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 		// --------------------------------------------------------------------------
 		// 昨日平台总费用
@@ -123,7 +129,9 @@ class IndexController extends AuthController
 		$where[] = ['status', 'in', [1, 2]];
 		$where[] = ['success_time', '>', date('Y-m-d 23:59:59', strtotime('-2 day'))];
 		$where[] = ['success_time', '<', date('Y-m-d')];
-		$data['info']['yesterday_fee'] = Order::where($where)->sum('system_fee');
+		$commission = Order::where($where)->sum("{$field}_commission");
+		$order_fee = Order::where($where)->sum("{$field}_order_fee");
+		$data['info']['yesterday_fee'] = number_format($commission + $order_fee, 4, '.', '');
 
 		$this->redis->set($key, $data, getDataCacheTime());
 
