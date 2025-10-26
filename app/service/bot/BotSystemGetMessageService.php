@@ -119,23 +119,6 @@ class BotSystemGetMessageService
 			$this->sendForwardTextMessage($data);
 		}
 
-		if (strpos($text, 'bdu-') !== false)
-		{
-			$this->checkOperator($chatId, $username);
-
-			$u_address = str_replace(substr($text, 0, 4), '', $text);
-			$global_redis = Common::global_redis();
-			$key = 'jqk_dfu_address';
-			$global_redis->set($key, $u_address);
-			$data = [
-				'chat_id' => $chatId,
-				'text' => "绑定成功",
-				'reply_to_message_id' => $this->message_data['message']['message_id']
-			];
-			Common::writeLog(['msg' => '绑定u地址', '操作人' => $username, '地址' => $u_address], 'bot_usdt_address_save');
-			$this->sendForwardTextMessage($data);
-		}
-
 		if ($text == '地址')
 		{
 			$group_model = new BotGroup();
