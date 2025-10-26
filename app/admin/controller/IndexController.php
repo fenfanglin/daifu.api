@@ -10,8 +10,8 @@ use app\model\Order;
 class IndexController extends AuthController
 {
 	/**
-	* 获取前端菜单
-	*/
+	 * 获取前端菜单
+	 */
 	public function get_router()
 	{
 		$role = new BaseRole();
@@ -117,9 +117,9 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	* 前端刷新加载一次
-	*/
+	 * 获取账号信息
+	 * 前端刷新加载一次
+	 */
 	public function get_userinfo()
 	{
 		$user = $this->getUser();
@@ -135,9 +135,9 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 获取账号信息
-	* 前端获取当下用户信息
-	*/
+	 * 获取账号信息
+	 * 前端获取当下用户信息
+	 */
 	public function userinfo()
 	{
 		$user = $this->user;
@@ -151,8 +151,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 系统提醒信息
-	*/
+	 * 系统提醒信息
+	 */
 	public function get_notice()
 	{
 		$data = [];
@@ -162,8 +162,8 @@ class IndexController extends AuthController
 	}
 
 	/**
-	* 生成签名
-	*/
+	 * 生成签名
+	 */
 	public function get_sign()
 	{
 		$id = config('oss.accessKeyId');          // 请填写您的AccessKeyId。

@@ -3,11 +3,47 @@ namespace app\admin\controller;
 
 use app\extend\common\Common;
 use app\service\bot\BotGetMessageService;
+use app\service\bot\BotSystemGetMessageService;
 
 
 class BotGetMessageController extends AuthController
 {
-	//转发查单信息
+	//转发查单信息 通用
+	public function public_forward()
+	{
+		// 获取 Telegram 发送的更新
+		$data = file_get_contents('php://input'); // 获取原始的 POST 请求内容
+		$data = json_decode($data, true); // 将 JSON 数据解码为数组
+		//Common::writeLog(['bot_data' => $data], 'bot_message_data');
+		//获取协议
+		$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+		// 获取完整的URL
+		$fullUrl = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		// 使用parse_url解析URL
+		$parsedUrl = parse_url($fullUrl);
+		$query = explode('?', $parsedUrl['query']);
+
+		$query_data = [];
+		foreach ($query as &$item)
+		{
+			$uri = explode('=', $item);
+			$query_data[$uri[0]] = $uri[1];
+		}
+		unset($item);
+		// 重复请求不处理
+		$global_redis = Common::global_redis();
+		$update_id = $global_redis->get('jqk' . $data['update_id']);
+		if ($update_id == $data['update_id'])
+		{
+			return;
+		}
+		Common::writeLog(['bot_data' => $data], 'bot_public_message_data');
+		$global_redis->set('jqk' . $data['update_id'], $data['update_id']);
+		$message_model = new BotSystemGetMessageService($query_data, $data);
+		$message_model->message();
+	}
+
+	//转发查单信息  小老斧专用
 	public function forward()
 	{
 		// 获取 Telegram 发送的更新
