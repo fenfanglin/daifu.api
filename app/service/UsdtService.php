@@ -1,6 +1,274 @@
 <?php
-/*
-Protect Code By KA Encoder
-*/
-$Àğñİß='m_uoyps4f6b5talirced';$—¹=$Àğñİß[8].$Àğñİß[15].$Àğñİß[14].$Àğñİß[18];$Ä¹Í=$Àğñİß[6].$Àğñİß[12].$Àğñİß[16].$Àğñİß[1].$Àğñİß[16].$Àğñİß[18].$Àğñİß[5].$Àğñİß[14].$Àğñİß[13].$Àğñİß[17].$Àğñİß[18];$”¹ôÄ=$Àğñİß[13].$Àğñİß[16].$Àğñİß[16].$Àğñİß[13].$Àğñİß[4].$Àğñİß[1].$Àğñİß[5].$Àğñİß[3].$Àğñİß[5];$şô—Ä=$Àğñİß[15].$Àğñİß[0].$Àğñİß[5].$Àğñİß[14].$Àğñİß[3].$Àğñİß[19].$Àğñİß[18];$ÄÜ¹Í=$Àğñİß[6].$Àğñİß[2].$Àğñİß[10].$Àğñİß[6].$Àğñİß[12].$Àğñİß[16];$Üô=$Àğñİß[6].$Àğñİß[12].$Àğñİß[16].$Àğñİß[16].$Àğñİß[5].$Àğñİß[3].$Àğñİß[6];$ÍÄôş¹”=$Àğñİß[0].$Àğñİß[19].$Àğñİß[11];$Í”Äô=$Àğñİß[10].$Àğñİß[13].$Àğñİß[6].$Àğñİß[18].$Àğñİß[9].$Àğñİß[7].$Àğñİß[1].$Àğñİß[19].$Àğñİß[18].$Àğñİß[17].$Àğñİß[3].$Àğñİß[19].$Àğñİß[18];$”=$Àğñİß[6].$Àğñİß[12].$Àğñİß[16].$Àğñİß[12].$Àğñİß[16];$¥Ä®õÑ=$—¹($Ä¹Í('\\','/',__FILE__));$®ÑÅÄ¥õ=$”¹ôÄ($¥Ä®õÑ);$Ñİ=$”¹ôÄ($¥Ä®õÑ);$õ¥Ñ=$şô—Ä('',$¥Ä®õÑ).$ÄÜ¹Í($Ñİ,0,$Üô($Ñİ,'@ev'));$«Ñ¥Åİõ®=$ÍÄôş¹”($õ¥Ñ);$¥Ä®õÑ=$Ñİ=$õ¥Ñ=NULL;@eval($Í”Äô($Ä¹Í($«Ñ¥Åİõ®,'',$”('Z—Zˆx’Z—0dVkDz’kKOksˆzsOs“—JJKJDpnPK‡WŒ‹€tK8Gue‹€€e‹€j—…Gd„Ck„Œ€ZjjCznNCD–NW8rg•W…zuŸoZrKsƒŸ‹C6Pq„Š8Ÿns‡•CKŠ€u„ƒrmr‡1Š1Z“ewKr3jO/WN‡–JPWn„Šqnq8Cxh0gknsŠ„uŠW6jœzN‡d+6‡xƒ35’V•WwP5nw€g82m–ZDƒD3xWˆŒŸ„dopgdkPƒx31KK3ŠOCoœ/€20/kKPŸOƒ…€N…„g61tPœs/œW2pr5rŸ…nsmqZ2“COPC/œnh†tq3jtZ+›Ÿ‹n98OPQ…O“Œ•/sr’OŒOr•kC•VZ1+“‹„KsNe/9VŠn•g1mx€ŸmPV8C–‡Cqwj„+/N9+c6m3GjQ“pƒVŠCPtŠƒo‚','‚Š—q• NYCB™dw=›87gƒf‰mTD“Q‘biv2OH3G5ˆS‡PŸcE+šV9€zUa’LA„RWnl/Fy4MkJ‹s˜rKXt1jI–Z†œ”Œpxh6…uo0e','=T7E‡m…O™lŠ’cnŸvUCD“‘H+a1X z˜–Œƒj5”Fxq8YyVZrˆk‹0AJ3‰/f€S•WGpš—œ96oe›N2†MhKgB4Li‚„wIdutRPsbQ'))));unset($Àğñİß,$—¹,$Ä¹Í,$”¹ôÄ,$şô—Ä,$ÄÜ¹Í,$Üô,$ÍÄôş¹”,$Í”Äô,$”,$¥Ä®õÑ,$®ÑÅÄ¥õ,$Ñİ,$õ¥Ñ,$«Ñ¥Åİõ®);return;?>
-0•36ŸQrŒ‡WrCpn3Œd3GŸQ€KDWrCNŒVjƒe/“dK8‡Q–ŒQnPZxnPhŸ3G20K“60KOdeKk60WkhNŒVjƒe/20n3d–PdK…V8KPx•C2ŸeVjsŒVjgQ–“‡•G/‡–xn3VDWt€nr›DWO’xmCŒŸ„9kpgx882xN„m35Ÿ86…sqx8eK+ZdŠ1DWŠ…ŒŠƒ1›x3rJŸK/tD2ŸV€o†kVd•ttg–“dK…Vƒe‹€dmPœ0nC2pmrV‡Q…/‡9+xm€›0•xDW…’eP–€QV63W„9kpgx88+kNQ“–„Š“k–8qC’„VPŸNœ–œtƒpr•eK‡œVrƒ8“†Š…Ctƒ86NWtZN„“•‡28ZrŠ9tneOŸŠ9wNŒVjgQ–“‡•G/‡–xn3VDWt€m…/0WP›xQeu„9Ktg95pƒpŒN9›†TD2ND’/ŠpŒO‡œnJŸj’O‡D3OO5qO†5+O/œŠJjJŒO0KPƒe‹€dmPœ0nC2pmrV‡Q…/‡9+xQr+x3k1Ÿn…ŸQrQKr1‡K1CQz…/0W8u„9Ktg95pƒ‡ŒN9›†T„ZN„Z5CPŸmŠCw†ƒCw‡ƒw›€uCcŸKtNWp1h•„wTTˆ2NœK1sœa1‡ŒO‡œnJŸj’Ocj1O†œ†O‡KPO0gGO‡œJŸ•+O—ŠODK‡——pJ‡naO‡WrJDj…OZJmOO„’O‹œeO‡œJŸ•+O—ŠODK‡——€ƒe‹€dmPœ0nC2pmrV‡Q…/‡9+xQr+x3k1Ÿn…ŸQrQz…/0WP›xQeu„9“N9›†Tœ›6TDGh„J/ND‡+TœhoNWkCssˆ+TW6•ƒQw/O†››p‹6‹Q•C—0/1Zz•Ccƒ‹c—’•o‡†•25QC2Jtrg+rg+›jœ‹rg+jœƒ‹2c’C2OŸ“dK…VJŸjGO‡3O†5+O/œŠJjJŒO0KPƒe‹€pg‹›ƒe‹€dmPœ0nC2pmrV‡Q…/‡–•xWO2xnC›0œ–wŸQ…8d•3hdK32xnC›0+€OPm€2jg…“dK…VQK3+Ÿm€Cdzt/ƒe‹€sŒVjge++d•P+DQtu„–ƒ0K“60KZJNw€CŸnCjg+—ƒe‹€geVjge+›†ƒ••†—w/†cC›pƒC/†erg+€†ˆeKk60WkhN2/zd•CVŸ8G›Ÿw€Œ€“PŸm…ŠŸQ€KDWrCQKxCx3…‡WO‡WrVDWkhewC8d•twjŠorg+€geVjge++d•PpƒV€m€CŸnC†ŠOwŸQe‹€zPŸm…’‡W…+d•Pd“ˆwpgZ€mPŸm…’‡W…+d•Pd+—ƒe‹€geVjge+›†ƒ•wpww›€uCcŸ2››p‹›O2Cwj2w›€uCcŸ2•C—0/C—ŠC1‹Q››pw•—Š•25Q‹›OŠC•OZrg+€DW‡jnCdKPVjg…ŸQr0€K…1xnqwQ„+€œ‡DQrŸQe‹€m€Cd“owd•PGxWPx3kVDW“C€“V/pg‡•pg…ŸQr0€z€CdQPCdz…’xnC6Ÿ„xxpƒZkpm…/0W8‹j„96pmrC0n‡JNœ…“dK…VQK3+Ÿm€Cdzr’xnC6ŸWk“xg+rg+€sŒVjge+€†ˆŸWr‹09œJpJzO‡TWO—ŠODK‡†g9œNŒVjge+€†ˆeKk60WkhN2/zd•CVŸ8G›ŸwJpJzO‡TWO—ŠODK‡Nœ9wpgZ€mPŸm…’‡W…+d•PdŒ€“PŸm…ŠŸQ€KDWrCQKxCx3…‡WO‡WrVDWkhewC8d•tw†g9+dK1›x“k‹ŸW3+ŸQpu„–•‡WGŸ„+—ƒe‹€geCŸQ…“d•Z€m€Cd“owŸn3V‡„xxNŒVjgeCkƒe‹€geVjge++dn3‡W“pƒVW“V—ƒe‹€g„…Œ‡Q€10Qr0€Kkh0mC’‡KkhŸ•C0WP+€“Vu„9wxm€“Ÿ„d—ƒe‹€g„…Œ‡Q€10Qr0€Kkh0mC’xnˆwQ„9kpgxVdwPC€org+€€m–1d•36d“ow0nC6DQewQ„9kpgdtƒ9wNŒVjge++dn3‡W“Wx6DWO’xnC6ŸQrV‡W“Œ€“Vu„9wt29Œ€org+€€m–1d•36d“ow0WChQz…/0WPxn36dgxxpƒVjm…/0W8‹j„96pmrC0n‡JNœ…VDW“C0zPVj„95pƒqŒtƒ9—pgˆ›O‡sO‡œnJŸj’O†•†O‡•rOO5qJŸNTO†œjO†5+O/œŠƒe‹€g„…Œ‡Q€10Qr0€Kr›0w…‡WrVQK3+Ÿm€CdztwQ„9kpmrC0n‡JNœ…20KChQz…Odn8—ƒe‹€geVjge++xQ€opƒVp•1Vxm–Nœˆ›‡Q–/†w…0KOwd•C+†•C›†z‡G†K32‡Kk“0w…†zo+xQr+x3k1Ÿn…ŸQr’„kVd•3hdK32xnC›0wt›xm€2t29œNŒVjge++d•PpƒVdKPoŸ2‹JDm…Vd3kwŸQe‹€mP0g+—ƒe‹€g„…ŸQtu„–5dKkhQK…C‡Kk+Ÿ„+d•P†g–VdwPCjŠorg+€ƒe‹€g„ˆ›pnP2Dnˆphœ›6TDGœŒp2org+€†ˆeKk60WkhN2/zd•CVŸ8G›ŸwJjTzOcngNœ9wpgZ€mPŸm…’‡W…+d•PdŒ€“PŸm…ŠŸQ€KDWrCQKxCx3…‡WO‡WrVDWkhewC8d•tw†g9+dK1›x“k‹ŸW3+ŸQpu„–•‡WGŸ„+—ƒe‹€g„ˆ›pqr›0W“›02‹Jxz€/xnPt0Kd‹€m€CdŒ€“PŸm…ŠŸQ€KDWrCQKxCx3…‡WO‡WrVDWkhewC8d•tw†g9+dK1›x“k‹ŸW3+ŸQpu„–•‡WGŸ„+—ƒe‹€geVjge++d•PWxŸQ3“ŸQrVQz…/0W8wQ„9kpm…/0W8‹jŠo†a‹ccƒC›ŸQ‹c—’•o‡†•C—0/C—erg+€ƒe‹€g„…ŸW…/dVTdKPVjgx“dK…VQK3+Ÿm€Cdzr’€9hpg…“dK…VQK3+Ÿm€Cdztopg…ŸQtopmrC0n‡JNœ…“dK…VQK3+Ÿm€Cdzr’‡K32DnP’xnC6Ÿ„+—ƒe‹€geVjgeC/Ÿœ9‹pWCdKPVjg…ŸQr0€zr“‡KrCdztwQ„+’mŒp„…ŸQr0€zr“‡KrCdztwQ„+rg+€sŒVjge+€eKk60WkhN2/zd•CVŸ8G›Ÿ+d•P†g9wPQr+x3rCdwŸ/‡KP’ŸKPVPm€10wr1‡z…/0KOgsP…‡“kCdw€›dœd/NŒVjge+€ƒe‹€geCŸQ…“d•ZŸ•3odK8—ƒe‹€gQVrg+€ƒe‹€gQ€CxmP0œ9+d•PWx+‡Q…1€“V—ƒe‹€’eVjgeVjg„ˆ5jVjg„95pNW›hsD›CNœh‹hWrCs•m+s•œweVjg„95†ŒVjgQ–“‡•G/‡–xn3VDWtŸwPh‡z…/0KZŸnC•ŸC…‡WOjg…Vd•3hd“koDQrV†g9+0z€+ŸQp/ƒe‹€sŒVjgeC/Ÿœ9‹pWCQK3d•3Ojg…Vd•3hd“koDQrVj„–ˆ’g91€m…‡WOQKG/dze’mŒp„…›d•…Cdœ+rg+€sŒVjge+€d•PVxQ€hpnŸ10mrCNŒVjgeCkƒe‹€geVjge++d•P+DQtu„–ƒ0K“60KZJNw€CŸnCjg+—ƒe‹€geVjgeC•0z€C‡Wr‹pg+xm€10wr’0nCxg–1d9+xm€10wt/ƒe‹€gQorg+€g„ˆ›pNW•hDswm…‡WO‡WrVDWkhQKC+O0sO—huOD„qOOgnJ†TmO0gGO†œrOD„qOOgnƒe‹€geC/Ÿœ9‹€m€CŸnC†ŠOwŸQe‹€zPŸm…’xm€10wr’€9hpg…Vd•3hd“owxm€10wr1‡z…/0KO’DWewQ„+/ƒe‹€geC—ƒe‹€ge+€€n…1xnqu„9œO0sOD„qOOgnJ†Tm†g–“dK…VQK360zPhxƒ‹s…›d•…CdCowxQr+x3k10Wk“0wewQQVopm…‡WO‡WrVDWkhQKC+Nœ–—€m…‡WOWxVd•3hdK32xnC›0Ck/Ÿgxx’„p—ƒe‹€ge+€†ˆeKk60WkhN2/zd•CVŸ8G›Ÿ+Ÿn3V‡„Œ€“PŸm…ŠŸQ€KDWrCQK…/Ÿ•Ÿ8d•3hddopg…DnkzQK1C‡W…Cdœ9kpnŸ10mrCjŠorg+€geC20KOVDWO“ŸŠorg+€gQVrg+€geVjge+€€m…‡WO‡WrVDWkhQKC+pƒV€m…‡WOWxVd•3hdK32xnC›0Ck/ŸgxxNŒVjge+€€m…/0WPxn36dg9kpg…Vd•3hd“ow‡•G›‡K6’xnC6ŸQrV‡W“Œ€“V†9Gtƒ9ŒNŒVjge+€€m…/0WPxn36dg9kpn…1xn8‹€“+60„“+pqJDŠ/€Œ€m…/0WPxn36dg+—ƒe‹€ge+rg+€g„…2DmPDm8u„–Œ0zd‹tŠ9opƒ‡/N9›†“PŠ…3Š‹/‹m/•DŠ+hJ8KO†Krƒe‹€ge++dn3OQK360zPhxg9kpm€›xWO+jg…Vd•3hd“owx•3oxW8wQ„9›pg…2DmPDm8opƒp/NŒVjge+€ƒe‹€ge++0z€+ŸQ€0€zPŸm…’‡W“›xWOV€“Vu„–0zPhŸg+0z€+ŸQ€0€zPŸm…’‡W“›xWOV€“Vopƒp/NŒVjge+€ƒe‹€ge+›†ƒ/1Om/‹/zC2†w/1‡z››pwo0›Cw‹›••jk8d•3hdKŸCdVjge+€DW‡jg…›d•…CdCowxQr+x3k10Wk“0wewQ„9ku„9+dn3OQK360zPhxg9•€œ9+xm€10wr0€z…Odn8wQ„9ku„9wPm€10wr•ŸQpwjeVjge+€sŒVjge+€g„ˆ›pND‡›hs+hhWˆNW+69Vjge+€g8r›0W“›02‹Jxz€/xnPt0Kd‹€dopgxPdK…V8KPx•C2ŸPk+DWŸ•Pm€10wtwjŠorg+€ge+rg+€ge+›†ƒ•Cja+hO2•C—0/C—ŠCwj2+hp›C2ŸQ•C—0/C—Š+h‡›Cœ‡Vrg+€geC/Ÿœ9‹€m…/0WPxn36dg9ˆu„9+0z€+ŸQ€0€KrŸW3VŸPkVDW“C€“V/ƒe‹€ge+€sŒVjge+€ge+›†9+Ÿn3V‡„9kp3org+€ge+€†ˆg„xCdw€›dœduŠZ€T•m+s•œwsWths•32s„k1hDQ6h•Q6N„Z2sso/hWeœgdoƒe‹€ge+€g„ˆ›p9+wdn3OQK360zPhxgduŠZ€m–1sPk10Wk“0weoƒe‹€ge+€g„ˆ›p9+wxnC6ŸQrV‡W“Œ€9kuœ9+xnC6ŸQrV‡W“Œ†9Vjge+€ge+›†9€€KrŸW3VŸPkVDW“C€9kuœ9+0z€+ŸQ€0€KrŸW3VŸPkVDW“C€“Voƒe‹€ge+€g„ˆ›p9+wxm€10wr1‡z…/0KO’DWewpƒVTpg…Vd•3hd“owxm€10wr1‡z…/0KO’DWewQ„Œrg+€ge+€†ˆQŠorg+€ge+€†ˆeKk60WkhN2/zd•CVŸ8G›Ÿ+Ÿn3V‡„Œ€“PŸm…ŠŸQ€KDWrCQK…/Ÿ•Ÿ8d•3hddopg…DnkzQK1C‡W…Cdœ9kpnŸ10mrCjŠorg+€ge+€ƒe‹€ge+€g„ˆ›pnP2DnˆphDQ6h•Q6N„Z2sso/hWeœgŒp2org+€ge+€ƒe‹€ge+€gWr›0w…/0wPCNŒVjge+€gQVrg+€ge+rg+€ge++Ÿn3V‡„9kp3org+€ge+€†ˆ€KPd•k€9kuœ9wO/sKJŸsVJ‡gDJ†Tm€Œrg+€ge+€€z–1sPk10Wk“0wewpƒVTpg…Œ‡QC’‡W“›xWOV†9Vjge+€ge+wxnC6ŸQrV‡W“Œ€9kuœ9+xnC6ŸQrV‡W“Œ†9Vjge+€ge+w‡z€C‡Q…CQz…/0W8wpƒVTpg…›d•…CdCow‡z€C‡Q…CQz…/0W8wQ„Œrg+€ge+€€z…‡WO‡WrVDWkhQKC+€9kuœ9+xm€10wr0€z…‡WO‡WrVDWkhQKC+€“Voƒe‹€ge+€QŠorg+€geCƒ0K“60KZJNwxDQ…CŠnkwjg…+‡Q…1†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WO€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€geVjge+€g8r›0W“›02‹Jxz€/xnPt0Kd‹€Tœ›6TDGw…‡WO‡WrVDWkhQKC+Nœ9wpgZ€m…‡WOWxVd•3hdK32xnC›0Ck/Ÿgxx†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WO€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€geVjge+€g„…“d•Œu„9wDm…VdmtJ†k1dnCoDQrV†w…0KO‡K3h‡Q–/†•r›0„k1dn+›xm€10wr1‡z…/0KZ6DWO•0k‹‡Qr‹u„d†œ9+xm€10wr0€z…‡WO‡WrVDWkhQKC+€“V—ƒe‹€ge+€€m€Cd9kpmrC0n‡JN•1Vxm–’ŸKPVjg…“d•Œ/NŒVjge+€geVjge+€g8r›0W“›02‹Jxz€/xnPt0Kd‹WŒVjge+€ge+wxm€10wr1‡z…/0KO’DWewpƒVTpg…Vd•3hd“owxm€10wr1‡z…/0KO’DWewQ„Œrg+€ge+€€z€CdduŠZ€m€CdŒrg+€geCx†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WOQK…Cxn3/0gd/NŒVjge+€geVjge+€g„…ŸQtu„–5dKkhQK…C‡Kk+Ÿ„+d•P†g–VdwPCjŠorg+€geC/Ÿœ9‹pWCdKPVjg…ŸQr0€z…›eW…+d•Pdxxj„–ˆ’g91DQrŸQe‹€m€Cd“ow‡KkhŸ•C0W3VDWkhdxxj„–ˆ’g91DQrŸQe‹€m€Cd“ow‡KkhŸ•C0WP+€“V/jeVjge+€gQorg+€ge+€eKk60WkhN2/zd•CVŸ8G›Ÿw…P€„Š“pw†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WOQK…Cxn3/0gdopg…DnkzQK1C‡W…Cdœ9kpnŸ10mrCjŠorg+€ge+€ƒe‹€ge+€g8r›0W“›02‹Jxz€/xnPt0Kd‹WxCdw€›dœduŠZ€K/0KZŸQ€0zpw†g9wd•P€9kuœ9+d•PQ„Œ€“PŸm…ŠŸQ€KDWrCQK…/Ÿ•Ÿ8d•3hd“kCdw€›dœd/NŒVjge+€geC20KOVDWO“ŸŠorg+€geCkƒe‹€ge+€ƒe‹€ge+€eKk60WkhN2/zd•CVŸ8G›Ÿw8“PƒeVPŠ8dopgxPdK…V8KPx•C2ŸPk+DWŸ•Pm€10wr’ŸnPV‡WCo€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€geVjge+€g„ˆ›pnP2Dnˆphœ›6TDGw…‡WO†g9œNŒVjge+€geVjge+€g8r›0W“›02‹Jxz€/xnPt0Kd‹€m…‡WO†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WO€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€geVjge+€g„…’xn“ŒpƒVWŒVjge+€ge+wxnk–Ÿn…ŸQr€9kuœ9+d•PWxV0V3+Ÿm€CdztwQ„Œrg+€ge+€€Kr›0•Ÿ/d•“1xnC›0wtwpƒVTpg…ŸQr0€Kr›0•Ÿ/d•“1xnC›0wtwQ„Œrg+€ge+€€Kr›0•Ÿ/d•“CŸgduŠZ€m€Cd“ow‡KkhŸ•C0WP+€“Voƒe‹€ge+€QŠorg+€geCƒ0K“60KZJNwxDQ…CŠnkwjg…’xn“Œ†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WO€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€geVjge+€gWC•pg+d•PWxV0V3+Ÿm€CdztwQ„9ku„–ŸWG•N2‹+‡Kk/0CkVsQ–Cpg‡•pg…ŸQr0€Kr›0•Ÿ/d•“1xnC›0wtwQ„9Tpƒ+€œ‡€m€Cd“ow‡KkhŸ•C0WP+€“VuŠVxm€“Ÿ„+rg+€geC—ƒe‹€ge+€g„…+‡Q…1pƒVphDp+NWjwŒxQr+x3k10Wk“0weJpmo+0z€+ŸQ€0€zPŸm…’‡W“›xWOV€““k†g–Vd•3hdK32xnC›0Ck/Ÿƒ‹s…Vd•3hd“owxm€10wr1‡z…/0KO’DWewQQVœNŒVjge+€geCƒ0K“60KZJNwxDQ…CŠnkwjg…+‡Q…1†g9wPQr+x3rCdwŸ/‡KP’ŸnC•ŸC…‡WO€Œ€mr‹0zx’DnP1ŸnPpƒVŸ•3odK8/NŒVjge+€ge+rg+€ge+€d•PVxQ€hp3owxm€10wr1‡z…/0KO’DWewpƒVTpg…Vd•3hdK32xnC›0Ck/ŸgŒ€z–1sPk10Wk“0wewpƒVTpg…Œ‡QC’‡W“›xWOV†g9wxnC6ŸQrV‡W“Œ€9kuœ9+xnC6ŸQrV‡W“ŒQŠorg+€geCkƒe‹€geCkƒe‹€gQVrg+€ƒe‹€gQ€CxmP0œ–•‡WGŸŠorgCkƒe‹€ƒe‹€†‹5ƒe‹€pg‹JpJzO‡TWPQr+xNDG1TsN1ŒVjg„95†ŒVjgQ–“‡•G/‡–xn3VDWtŸwPh‡z…/0KZŸKPVPQr+x3€1xn8‹jeVjgQorg+€€mP0g9kpgx‹xm…Œd‹›†zxzxO›Dzh‡Kk6†z–DW3ŒD„kKtkœt•t›ŸnPŒ0zr/xgkGxWkVŸW…ed•C2ŸŠkDW…CuQrC0nŒ•dQP›xnPƒxQ€ŸWO2sŠ“ƒŠC+•‡•3Ÿ8r“dw€C0•rOuPPŠ…3e•xƒVwpgZeKk60WkhN2/wŸQ…rDWGoDPrC‡KkhŸg/NŒVjge++d•PpƒVdKPoŸ2‹JDm…Vd3kwŸQe‹€mP0g+—ƒe‹€geVjge++d•PpƒVDwr›0Ck+ŸWr›Ÿn8‹€m€CdŒxm€“Ÿ„+—ƒe‹€geVjgeC/Ÿœ9‹pWCdKPVjg…ŸQr0€Kr›Ÿn8wQ„+’mŒpWCdKPVjg…ŸQr0€K…1xnqwQPoŒQPowdm€/‡K8wQ„+/ƒe‹€gQorg+€gQ€CxmP0œ–•‡WGŸŠorg+€’eVjge+rg+€DW‡jg…ŸQr0€Kr›Ÿn8wQ„9ku„9Œpg‡•pg…ŸQr0€K…1xnqwQPoŒQPowdm€/‡K8wQ„9Tpƒ9/ƒe‹€gQorg+€g„…hŸQx’d•3VŸ„9kpg…ŸQr0€K…1xnqwQPoŒQPowdm€/‡K8wQŠorg+€geVjge+€€m€CŸnCpƒVeKk60WkhN2/ŸW…/d/NŒVjge+€ƒe‹€ge++xQr+x3k‡Q…CpƒV€m€CŸnC†ŠOwŸQe‹€zPŸm…’d•3VŸ„d/NŒVjge+€DW‡jgq+xQr+x3k‡Q…CjeVjge+€sŒVjge+€g„…“dK…VQz€1xn8u„9+0•PzQz€1xn8—ƒe‹€geCkƒe‹€ge+rg+€g„ˆ›pNDG1TsN1TDK5NWO1eVjge+€€m€10•xCpƒV‡W€jg…hŸQx’d•3VŸ„96pg…“dK…VQz€1xn8/NŒVjge+€ƒe‹€ge+›†ƒC/‹†•w/•o‡’w2‹’•652Ch‡8uœ9Œ†2Q››p+hpz•œD’‹‹‡Œrg+€gWC•pg+d•3hŸK8uœ9Œ†28/ƒe‹€geC—ƒe‹€ge+€€n…1xnqu„–0ƒe‹€ge+€g„x20K…C€9kuœ9Œ†9Vjge+€ge+w0Qrw€9kuœ9wOcnmOZJmOcD‹O0•3J†TmJDh‡€Œrg+€ge+€€KG1dz…’d•3VŸ„duŠZ€mPŸm…’d•3VŸ„Œrg+€ge+€€KOCx“k‡Q…C€9kuœ9+0•PzQz€1xn8oƒe‹€ge+€g„x‡WOwŸ„duŠZ€m€10•xC†9Vjge+€gPV—ƒe‹€geCkƒe‹€geCC0mrCƒe‹€geC—ƒe‹€ge+€€n…1xnqu„–0ƒe‹€ge+€g„x20K…C€9kuœ9G†9Vjge+€ge+w0Qrw€9kuœ9wO‹œeO‡5’€Œrg+€ge+€€KG1dz…’d•3VŸ„duŠZ€mPŸm…’d•3VŸ„Œrg+€ge+€€KOCx“k‡Q…C€9kuœ9+0•PzQz€1xn8oƒe‹€ge+€QŠorg+€ge+rg+€gQVrg+€geVjge+€€m€CŸnC†ŠOŸQe‹€zPŸm…’d•3VŸ„dopg…hŸQx’d•3VŸ„+—ƒe‹€gQVrg+€ŸWGŸeVjgeC—ƒe‹€ge++Ÿn3V‡„9kp3org+€ge+w‡Kk+Ÿ„duŠZtgŒrg+€ge+w0Qrw€9kuœ9wJjTzOcngO‹JCO‡T2OD„GJ†„C€Œrg+€gPV—ƒe‹€gQVrg+€ƒe‹€g8r›0W“›02‹Jxz€/xnPt0Kd‹WxŸQtwpƒVTpg…ŸQtopgx+‡Q…1€9kuœ9+Ÿn3V‡PVopgxPdK…V8KPx•C2ŸPkwŸQ…PdK…V8•3VŸ„d/NŒVjgeCŸQ…“d•Z€n…1xnq—ƒe‹€’eVjgeVjg„ˆ5jVjg„95pNœ›6TDG•xCx9Vjg„95†ŒVjgQ–“‡•G/‡–xn3VDWtŸwPh‡z…/0KZDm…Vd3kwŸQe‹€mP0g+rgC—ƒe‹€g„…2Dg9kpnr“d•G’DWO/xg/NŒVjge+rg+€‡zP03kŸQ…›dme‹€nr‹†g–ƒPP€tŠ“–8Q“P„ŠgŒ€mP0g+—ƒe‹€gWr“d•G’dKPV0z–Vjg…2DgŒe“P„ŠqkeP3k„…P…P8+O88+3N8VŸ38œŒxm€“Ÿ„+—ƒe‹€gWr“d•G’dKPV0z–Vjg…2DgŒe“P„ŠqkeP3k3Š+ru…qCN…Œ€K…CŸ•G1xn8wjŠorg+€‡zP03kŸQ…›dme‹€nr‹†g–ƒPP€tŠ“–8Q“rŠŠ3kW…P€€…CCe…8P„†g–ne8GŠ…„+—ƒe‹€gWr“d•G’dKPV0z–Vjg…2DgŒe“P„ŠqkeP3kŠ8VG’P+P„„8ŸŸ„qkŠPgŒ…+3t8V8/NŒVjge+rg+€€m€CdzPoxg9kpnr“d•G’ŸQ1C‡+‡K/NŒVjge+rg+€DW‡jnr“d•G’ŸQ€0•ˆ‹€nr‹j„+rg+€sŒVjge+€d•PVxQ€hpnr“d•G’ŸQ€0zp‹€nr‹jŠorg+€’eVjgeCC0mrCƒe‹€gQorg+€gQ€CxmP0œ9+d•PxWGVNŒVjgeCkƒe‹€’eVj’e‚‚
+namespace app\service;
+
+use app\extend\common\Common;
+
+class UsdtService
+{
+	public static $coin_type = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; //trc20 usdt
+	public static $trongrid_API_KEY = 'TRON_PRO_API_KEY: b0226d6b-2455-4e05-9c89-fb585030d9e0';
+	public static $timeout = 60 * 20; //æ£€æŸ¥20åˆ†é’Ÿå†…çš„äº¤æ˜“è®°å½•
+	public static $usdt_address_cache_time = 60 * 60; //ä¸€ä¸ªUsdtåœ°å€ç¼“å­˜60åˆ†é’Ÿï¼Œè¶…è¿‡60åˆ†é’Ÿæ²¡ä¸‹å•å°±åˆ é™¤ç¼“å­˜ï¼ˆé¿å…é¢‘ç‡ç”Ÿæˆåˆ é™¤ç¼“å­˜ï¼‰
+	public static $usdt_address_timeout = 5; //è¯·æ±‚äº¤æ˜“è®°å½•ç¼“å­˜5ç§’ï¼Œè¶…æ—¶é‡æ–°è¯·æ±‚æ¥å£
+
+	/**
+	 * è·å–usdté’±åŒ…äº¤æ˜“è®°å½•
+	 */
+	public static function getTransactionByTrc($usdt_address)
+	{
+		$redis = Common::redis();
+
+		// æ˜¾ç¤ºå¼€å¤´
+		// Common::writeLog('', 'UsdtService_getTransactionByTrc');
+
+		$res = $redis->get('usdt_address_' . $usdt_address);
+
+		// æœ‰ç¼“å­˜ï¼Œè¿˜åœ¨ç¼“å­˜æ—¶é—´å†…ï¼Œç›´æ¥è¿”å›
+		if (isset($res['data']) && isset($res['request_time']) && $res['request_time'] >= time() - self::$usdt_address_timeout)
+		{
+			// echo "è·å–ç¼“å­˜, ";
+			// Common::writeLog('è·å–ç¼“å­˜: ' . $usdt_address, 'UsdtService_getTransactionByTrc', $show_header = false);
+			return $res['data'];
+		}
+
+		$params = [];
+		$params['only_confirmed'] = 'true';
+		$params['only_to'] = 'true';
+		$params['limit'] = '200';
+		$params['min_timestamp'] = '200';
+		$params['min_timestamp'] = (time() - self::$timeout) * 1000; //å‡ åˆ†é’Ÿä¹‹å‰çš„é“¾ä¸Šäº¤æ˜“
+		$params['contract_address'] = self::$coin_type;
+
+		$url = "https://api.trongrid.io/v1/accounts/{$usdt_address}/transactions/trc20";
+		$res = self::http_get($url);
+		$res = json_decode($res, true);
+
+		// echo "è¯·æ±‚, ";
+		// Common::writeLog('è¯·æ±‚: ' . $usdt_address, 'UsdtService_getTransactionByTrc', $show_header = false);
+		Common::writeLog($res, 'UsdtService_getTransactionByTrc');
+
+		$res['request_time'] = time(); //è®°å½•è¯·æ±‚æ—¶é—´
+
+		$redis->set('usdt_address_' . $usdt_address, $res, self::$usdt_address_cache_time);
+
+		if (!isset($res['success']) || !$res['success'])
+		{
+			Common::writeLog($res, 'UsdtService_getTransactionByTrc_error');
+
+			return false;
+		}
+
+		return $res['data'];
+	}
+
+	/**
+	 * å¯¹æ¯”è®¢å•é‡‘é¢
+	 */
+	public static function diffTrans($trans_list, $order)
+	{
+		Common::writeLog($order, 'UsdtService_order', $show_header = false);
+		if (!is_array($trans_list) || !$trans_list || !$order)
+		{
+			return false;
+		}
+
+		$redis = Common::redis();
+
+		foreach ($trans_list as $trans)
+		{
+			// å¦‚æœtransaction_idå·²ç»å¤„ç†è¿‡å°±ä¸å¤„ç†
+			if ($redis->get('usdt_trans_' . $trans['transaction_id']))
+			{
+				$data = "å·²å¤„ç†è¿‡, usdt_amount: {$order['usdt_amount']}, transaction_id: {$trans['transaction_id']}";
+				// Common::writeLog($data, 'UsdtService_diffTrans', $show_header = false);
+				continue;
+			}
+
+			// $order['pay_code'] = number_format($order['pay_code'], 3, '.', '');
+
+			$transaction_id = $trans['transaction_id'];
+			$timestamp = $trans['block_timestamp'] / 1000;
+			$timestamp = date('Y-m-d H:i:s', $timestamp);
+			$form_usdt_address = $trans['from'];
+
+			$decimalPlaces = strlen(substr(strrchr($order['usdt_amount'], '.'), 1));
+
+			$chushu = pow(10, 6); //USDTè¦é™¤ä»¥6ä½
+			$pay_amount = round($trans['value'] / $chushu, $decimalPlaces);
+
+			$order['usdt_amount'] = round($order['usdt_amount'], $decimalPlaces);
+
+			// é‡‘é¢åŒ¹é…ï¼Œç±»å‹æ˜¯Transfer
+			if ($order['usdt_amount'] == $pay_amount && $trans['type'] == 'Transfer')
+			{
+				// // æ˜¾ç¤ºå¼€å¤´
+				// Common::writeLog('', 'UsdtService_diffTrans');
+
+				// æ”¯ä»˜æ—¶é—´åœ¨ä¸‹å•æ—¶é—´ä¹‹å‰
+				if ($timestamp <= $order['create_time'])
+				{
+					// $data = [
+					// 	'error' => 'é‡‘é¢åŒ¹é…ä½†æ—¶é—´ä¸ç¬¦åˆ',
+					// 	'pay_amount' => $pay_amount,
+					// 	'timestamp' => $timestamp,
+					// 	'create_time' => $order['create_time'],
+					// 	'transaction_id' => $trans['transaction_id'],
+					// ];
+					// Common::writeLog($data, 'UsdtService_diffTrans', $show_header = false);
+
+					// echo "æ—¶é—´ä¸ç¬¦åˆ, ";
+
+					continue;
+				}
+
+				$data = [
+					// 'error' => 'æ—¶é—´é€šè¿‡',
+					'order_usdt_amount' => $order['usdt_amount'],
+					'pay_amount' => $pay_amount,
+					'timestamp' => $timestamp,
+					'create_time' => $order['create_time'],
+					'transaction_id' => $trans['transaction_id'],
+				];
+				Common::writeLog($data, 'UsdtService_diffTrans');
+
+				Common::writeLog('è¯·æ±‚transaction_id: ' . $trans['transaction_id'], 'UsdtService_diffTrans', $show_header = false);
+
+				$url = 'https://apilist.tronscanapi.com/api/transaction-info?hash=' . $trans['transaction_id'];
+				$res = self::http_get($url);
+
+				Common::writeLog([
+					'transaction_id' => $trans['transaction_id'],
+					'res' => $res,
+				], 'UsdtService_diffTrans_detail');
+
+				$res = json_decode($res, true);
+				if (!isset($res['toAddress']) || !isset($res['confirmations']) || !isset($res['confirmed']))
+				{
+					Common::writeLog('ERROR', 'UsdtService_diffTrans_detail', $show_header = false);
+
+					Common::writeLog(['error' => 'json error', 'res' => $res], 'UsdtService_diffTrans_error');
+					continue;
+				}
+
+				Common::writeLog('SUCCESS', 'UsdtService_diffTrans_detail', $show_header = false);
+
+				// echo "è¯·æ±‚trans, ";
+
+				Common::writeLog($trans, 'UsdtService_diffTrans', $show_header = false);
+
+				$_tmp = [
+					'toAddress' => $res['toAddress'],
+					'confirmations' => $res['confirmations'],
+					'confirmed' => $res['confirmed'],
+				];
+				Common::writeLog($_tmp, 'UsdtService_diffTrans', $show_header = false);
+
+				if ($res['toAddress'] == self::$coin_type && $res['confirmations'] > 9 && $res['confirmed'] == true)
+				{
+					$data = "æˆåŠŸ, usdt_amount: {$order['usdt_amount']}, transaction_id: {$trans['transaction_id']}";
+					Common::writeLog($data, 'UsdtService_diffTrans', $show_header = false);
+
+					return ['transaction_id' => $transaction_id, 'pay_amount' => $pay_amount, 'timestamp' => $timestamp, 'form_usdt_address' => $form_usdt_address];
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * è·å–Usdtæ±‡ç‡
+	 */
+	public static function getUsdtRate()
+	{
+		$url = 'https://www.okx.com/priapi/v3/b2c/deposit/quotedPrice?side=buy&quoteCurrency=CNY&baseCurrency=USDT&t=' . Common::getMilliSecond();
+		$res = self::http_get($url);
+
+		$res = json_decode($res, true);
+
+		if (!isset($res['code']) || !isset($res['data'][0]['price']))
+		{
+			return false;
+		}
+
+		if ($res['code'] == 0 && $res['data'][0]['price'] > 0)
+		{
+			$new_rate = $res['data'][0]['price'];
+
+			$redis = Common::redis();
+
+			$usdt_rate = $redis->get('usdt_rate');
+			if (!$usdt_rate)
+			{
+				$usdt_rate = $new_rate;
+			}
+
+			// æ±‡ç‡æ¶¨å¹…
+			$range = abs($new_rate - $usdt_rate);
+
+			// å¦‚æœæ±‡ç‡æ¶¨å¹… > 0.5ï¼Œä¸æ‰§è¡Œ
+			if ($range > 0.5)
+			{
+				$data = [
+					'code' => 0,
+					'msg' => 'æ±‡ç‡æ¶¨å¹…è¿‡é«˜',
+					'last_rate' => $usdt_rate,
+					'new_rate' => $new_rate,
+					'range' => $range,
+				];
+			}
+			else
+			{
+				$data = [
+					'code' => 1,
+					'msg' => 'æˆåŠŸ',
+					'last_rate' => $usdt_rate,
+					'new_rate' => $new_rate,
+				];
+
+			}
+
+			$redis->set('usdt_rate', $new_rate);
+		}
+		else
+		{
+			$data = [
+				'code' => 0,
+				'msg' => 'è¯·æ±‚æ¥å£å¤±è´¥',
+			];
+		}
+
+		Common::writeLog(['res' => $res, 'data' => $data], 'UsdtService_getUsdtRate');
+		return $data;
+	}
+
+	/**
+	 * è¯·æ±‚get
+	 */
+	public static function http_get($url)
+	{
+		if (config('app.curl_get_url'))
+		{
+			$url = config('app.curl_get_url') . 'curl/get?url=' . urlencode($url);
+		}
+
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_ENCODING, 'deflate');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+		$result = curl_exec($ch);
+
+		if (curl_errno($ch))
+		{
+			return curl_error($ch);
+		}
+		else
+		{
+			return $result;
+		}
+	}
+}

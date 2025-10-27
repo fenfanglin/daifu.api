@@ -2,12 +2,15 @@
 namespace app\cli\controller;
 
 use app\extend\common\Common;
-use app\model\BusinessRecharge;
 use app\service\UsdtService;
+use app\service\RechargeService;
+use app\model\BusinessRecharge;
 use app\model\Setting;
 
 class UsdtController
 {
+	protected $transaction_cache_time = 60 * 60 * 24; //成功交易区块链缓存1天，避免重复请求接口
+
 	/**
 	 * 监控usdt充值
 	 */
