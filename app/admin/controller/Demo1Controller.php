@@ -206,4 +206,18 @@ class Demo1Controller extends BaseController
 
 		dd("num = " . count($list), "last_id = {$order->id}");
 	}
+
+	public function test()
+	{
+		$where = [];
+		$where[] = ['channel_id', 'in', '1,2'];
+		$where[] = ['business_id', '=', 30300];
+		$where[] = ['status', '=', -1]; //状态：-1未支付 1成功，未回调 2成功，已回调 -2生成订单失败	
+		$where[] = ['api_status', '=', 1]; //下单状态：-1未下单 1成功 -2失败
+		$list = \app\model\Order::field('`channel_account_id`, COUNT(`id`) AS `num`')->where($where)->group('channel_account_id')->select()->column('num', 'channel_account_id');
+
+		// dd(\app\model\Order::field('channel_account_id, SUM(id) as num')->where($where)->group('channel_account_id')->fetchSql(1)->select());
+
+		dd($list);
+	}
 }

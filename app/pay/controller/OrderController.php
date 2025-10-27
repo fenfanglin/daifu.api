@@ -229,41 +229,44 @@ class OrderController extends AuthController
 			}
 			elseif ($channel_id == 2) //鼎薪通
 			{
-				$config = [
-					'mchid' => $channel_account->mchid ?? '',
-					'appid' => $channel_account->appid ?? '',
-					'key_id' => $channel_account->key_id ?? '',
-					'key_secret' => $channel_account->key_secret ?? '',
-				];
+				// $config = [
+				// 	'mchid' => $channel_account->mchid ?? '',
+				// 	'appid' => $channel_account->appid ?? '',
+				// 	'key_id' => $channel_account->key_id ?? '',
+				// 	'key_secret' => $channel_account->key_secret ?? '',
+				// ];
 
-				if (!$config['mchid'] || !$config['appid'] || !$config['key_id'] || !$config['key_secret'])
-				{
-					$order->status = -2;
-					$order->save();
+				// if (!$config['mchid'] || !$config['appid'] || !$config['key_id'] || !$config['key_secret'])
+				// {
+				// 	$order->status = -2;
+				// 	$order->save();
 
-					$this->orderError('工作室参数不正确');
-				}
+				// 	$this->orderError('工作室参数不正确');
+				// }
 
-				$service = new \app\service\api\DingxintongService($config);
+				// $service = new \app\service\api\DingxintongService($config);
 
-				$data = [
-					'out_trade_no' => $order->out_trade_no,
-					'amount' => $order->amount,
-					'account_type' => $order->account_type,
-					'account' => $order->account,
-					'account_name' => $order->account_name,
-					'bank' => $order->bank,
-				];
+				// $data = [
+				// 	'out_trade_no' => $order->out_trade_no,
+				// 	'amount' => $order->amount,
+				// 	'account_type' => $order->account_type,
+				// 	'account' => $order->account,
+				// 	'account_name' => $order->account_name,
+				// 	'bank' => $order->bank,
+				// ];
 
-				$res = $service->create($data);
+				// $res = $service->create($data);
 
-				if (!isset($res['status']) || $res['status'] != 'SUCCESS')
-				{
-					$order->status = -2;
-					$order->save();
+				// if (!isset($res['status']) || $res['status'] != 'SUCCESS')
+				// {
+				// 	$order->status = -2;
+				// 	$order->save();
 
-					$this->orderError($res['msg'] ?? '下单失败');
-				}
+				// 	$this->orderError($res['msg'] ?? '下单失败');
+				// }
+
+				$order->api_status = -1; //下单状态：-1未下单 1成功 -2失败
+				$order->save();
 			}
 		}
 
