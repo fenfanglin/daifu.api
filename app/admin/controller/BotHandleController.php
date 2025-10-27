@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use app\extend\common\BaseController;
 use app\extend\common\Common;
 use app\model\BusinessChannel;
+use app\model\BusinessWithdrawLog;
 use app\model\DB2Order;
 use app\model\Business;
 use app\model\Channel;
@@ -19,39 +20,102 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Control-Type, Co
 class BotHandleController extends BaseController
 {
 
-	//检查余额是否充值
-	public function checkMoney()
+	//检查余额是否充值  所有的商户
+	public function checkMoneyAll()
 	{
 		$money = new BotGroup();
-		$list = $money->where('status', '=', 1)->field('id,business_id,chat_id')->select()->toArray();
+		$list = $money->where('status', '=', 1)->where('parent_id', '<>', 30318)->where('quota_status', 1)->field('id,business_id,chat_id,quota')->select()->toArray();
 		if ($list)
 		{
 
 			$message_model = new BotGetMessageService(['bot_token' => '8487258468:AAGfB1orYOR8Xu2lRNvQqDWuF9AiriXG87E'], []);
-
+			$global_redis = \app\extend\common\Common::global_redis();
 			$business_model = new Business();
 			foreach ($list as $key)
 			{
-
 				//查出商户最近半小时有无下单
 				$where = [];
-				$where[] = ['business_id', '=', $key['business_id']];
-				$where[] = ['type', '=', 2];  //类型为订单
+				$where[] = ['sub_business_id', '=', $key['business_id']];
+				$where[] = ['type', 'in', [1, 2]];  //类型为订单
 				$where[] = ['create_time', '>', date('Y-m-d H:i:s', time() - (60 * 30))];  //最近半小时的数据
-				$is_order = BusinessMoneyLog::where($where)->find();
+				$is_order = BusinessWithdrawLog::where($where)->find();
 				if (!$is_order)
 				{
 					continue;
 				}
 
+				$keys = 'money_negative_warning_open' . $key['business_id'];
+				$check = $global_redis->get($keys);
+				if ($check == 2)
+				{
+					continue;
+				}
+				$business = $business_model->where('id', $key['business_id'])->find();
+				if ($business && (int) $business->allow_withdraw < $key['quota'])
+				{
+
+					if ($global_redis->get("money_negative_warning_{$key['business_id']}"))
+					{
+						continue;
+					}
+					$global_redis->set("money_negative_warning_{$key['business_id']}", $key['business_id'], (30 * 60));
+					$data = [
+						'chat_id' => $key['chat_id'],
+						'text' => "尊敬的【" . $business->realname . "】vip客户\n您现在的可用余额【" . $business->allow_withdraw . "】\n已经低于【" . $key['quota'] . "】\n为了不影响您的正常代付,请尽快充值!",
+						// 	'reply_to_message_id' => $this->message_data['message']['message_id']
+					];
+					Common::writeLog(['msg' => '余额提醒', 'text' => $data['text']], 'bot_yetx');
+					$message_model->sendForwardTextMessage($data);
+				}
+			}
+		}
+	}
+
+	//检查余额是否充值  30318下的商户
+	public function checkMoney()
+	{
+		$money = new BotGroup();
+		$list = $money->where('status', '=', 1)->where('parent_id', 30318)->field('id,business_id,chat_id')->select()->toArray();
+		if ($list)
+		{
+
+			$message_model = new BotGetMessageService(['bot_token' => '8487258468:AAGfB1orYOR8Xu2lRNvQqDWuF9AiriXG87E'], []);
+			$global_redis = \app\extend\common\Common::global_redis();
+			$business_model = new Business();
+			foreach ($list as $key)
+			{
+				//查出商户最近半小时有无下单
+				$where = [];
+				$where[] = ['sub_business_id', '=', $key['business_id']];
+				$where[] = ['type', 'in', [1, 2]];  //类型为订单
+				$where[] = ['create_time', '>', date('Y-m-d H:i:s', time() - (60 * 30))];  //最近半小时的数据
+				$is_order = BusinessWithdrawLog::where($where)->find();
+				if (!$is_order)
+				{
+					continue;
+				}
+
+				$keys = 'money_negative_warning_open' . $key['business_id'];
+				$check = $global_redis->get($keys);
+				if ($check == 2)
+				{
+					continue;
+				}
 				$business = $business_model->where('id', $key['business_id'])->find();
 				if ($business && (int) $business->allow_withdraw < 5000)
 				{
+
+					if ($global_redis->get("money_negative_warning_{$key['business_id']}"))
+					{
+						continue;
+					}
+					$global_redis->set("money_negative_warning_{$key['business_id']}", $key['business_id'], (10 * 60));
 					$data = [
 						'chat_id' => $key['chat_id'],
 						'text' => "尊敬的【" . $business->realname . "】vip客户\n您现在的可用余额【" . $business->allow_withdraw . "】\n已经低于【5000】\n为了不影响您的正常代付,请尽快充值!",
 						// 	'reply_to_message_id' => $this->message_data['message']['message_id']
 					];
+					Common::writeLog(['msg' => '余额提醒', 'text' => $data['text']], 'bot_yetx');
 					$message_model->sendForwardTextMessage($data);
 				}
 			}
@@ -196,7 +260,7 @@ class BotHandleController extends BaseController
 		// if(!$result){
 		//     return ['code'=>0,'msg'=>'更新失败请联系管理员'];
 		// }
-		BusinessService::changeAllowWithdraw($business_id, $t . $money, 3, $item_id = 0, $remark = '');
+		BusinessService::changeAllowWithdraw($business_id, $t . $money, 3, $item_id = 0, $remark = '机器人上分');
 		return ['code' => 1, 'msg' => '更新成功', 'last_quota' => $quota];
 	}
 

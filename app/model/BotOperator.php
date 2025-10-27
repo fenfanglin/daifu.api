@@ -3,9 +3,9 @@ namespace app\model;
 
 use app\extend\common\BaseModel;
 
-class BotGroup extends BaseModel
+class BotOperator extends BaseModel
 {
-	protected $table = 'pay_bot_group';
+	protected $table = 'pay_bot_operator';
 
 	protected $createTime = 'create_time';
 	protected $updateTime = 'update_time';
@@ -14,7 +14,7 @@ class BotGroup extends BaseModel
 	// 状态：1启用 -1禁用
 	const STATUS = [
 		1 => '启用',
-		-1 => '禁用',
+		0 => '禁用',
 	];
 	const STATUS_CLASS = [
 		1 => '',
@@ -23,23 +23,19 @@ class BotGroup extends BaseModel
 
 	const QUOTA_STATUS = [
 		1 => '启用',
-		-1 => '禁用',
+		0 => '禁用',
 	];
 
 	const OPERATOR_STATUS = [
 		1 => '操作员可操作',
-		-1 => '所有人可操作'
+		0 => '所有人可操作'
 	];
 
 	const TYPE = [
-		1 => '代理',
-		2 => '工作室',
-		3 => '商户',
-	];
-
-	const BUSINESS_TYPE = [
-		2 => '工作室',
-		3 => '商户',
+		1 => '四方',
+		2 => '商户',
+		3 => '卡商',
+		4 => '四方卡商',
 	];
 
 	public function operator_status()

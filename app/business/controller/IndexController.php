@@ -64,7 +64,6 @@ class IndexController extends AuthController
 
 
 		$where_business = [];
-
 		//类型：1代理 2工作室 3商户
 		if (in_array($this->user->type, [1]))
 		{

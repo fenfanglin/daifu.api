@@ -287,5 +287,49 @@ return [
 				],
 			],
 		],
+		'bot' => [
+			'title' => '机器人管理',
+			'icon' => 'icon-xingzhuang-xingxing',
+			'hidden' => false,
+			'children' => [
+				'list_group' => [
+					'title' => '群聊列表',
+					'hidden' => false,
+					'noCache' => true,
+					'white_list' => [
+						'bot_group:list',
+						'bot_group:save:add',
+						'bot_group:save:edit',
+						'bot_group:delete'
+					],
+					'permission' => [
+						'bot_group:delete' => '删除',
+						'bot_group:view' => '查看',
+						'bot_group:save:edit' => '添加',
+						'bot_group:enable' => '启用',
+						'bot_group:disable' => '禁用',
+					],
+				],
+				'list_operator' => [
+					'title' => '操作员',
+					'hidden' => false,
+					'noCache' => true,
+					'white_list' => [
+						'bot_operator:list',
+						'bot_question:add',
+						'bot_operator:save:add',
+						'bot_operator:save:edit',
+						'bot_operator:delete'
+					],
+					'permission' => [
+						'bot_operator:delete' => '删除',
+						'bot_operator:view' => '查看',
+						'bot_operator:save:edit' => '编辑',
+						'bot_operator:enable' => '启用',
+						'bot_operator:disable' => '禁用',
+					],
+				],
+			],
+		],
 	],
 ];

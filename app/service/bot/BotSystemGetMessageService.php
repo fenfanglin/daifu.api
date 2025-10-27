@@ -18,7 +18,7 @@ use app\service\bot\BotDingxintongService;
 use app\service\api\DingxintongService;
 use Spatie\PdfToImage\Pdf;
 
-class BotGetMessageService
+class BotSystemGetMessageService
 {
 	//消息数据
 	public $message_data;
@@ -37,7 +37,7 @@ class BotGetMessageService
 		$this->message_data = $message_data;
 		$this->token = $query_data['bot_token'];
 		$this->bot_function = new BotHandleController();
-		$this->bot_name = 'jqkceshibot';       //机器人用户名 更换机器人时记得要修改这里
+		$this->bot_name = 'kingpaydf_bot';       //机器人用户名 更换机器人时记得要修改这里
 	}
 
 	/**处理读取到的所有消息
@@ -119,33 +119,31 @@ class BotGetMessageService
 			$this->sendForwardTextMessage($data);
 		}
 
-		if (strpos($text, 'bdu-') !== false)
-		{
-			$this->checkOperator($chatId, $username);
-
-			$u_address = str_replace(substr($text, 0, 4), '', $text);
-			$global_redis = Common::global_redis();
-			$key = 'jqk_dfu_address';
-			$global_redis->set($key, $u_address);
-			$data = [
-				'chat_id' => $chatId,
-				'text' => "绑定成功",
-				'reply_to_message_id' => $this->message_data['message']['message_id']
-			];
-			Common::writeLog(['msg' => '绑定u地址', '操作人' => $username, '地址' => $u_address], 'bot_usdt_address_save');
-			$this->sendForwardTextMessage($data);
-		}
-
 		if ($text == '地址')
 		{
-
-			$global_redis = Common::global_redis();
-			$key = 'jqk_dfu_address';
-			$usdt_address = $global_redis->get($key);
-			if (!$usdt_address)
+			$group_model = new BotGroup();
+			$group_info = $group_model->where('chat_id', $chatId)->find();
+			if (!$group_info)
 			{
+				$data = [
+					'chat_id' => $chatId,
+					'text' => '未绑定信息不可操作',
+					'reply_to_message_id' => $this->message_data['message']['message_id']
+				];
+				$this->sendForwardTextMessage($data);
 				exit;
 			}
+
+			if ($group_info->type == 1)
+			{
+				$usdt_address = $group_info->usdt;
+			}
+			else
+			{
+				$group_infos = $group_model->where('business_id', $group_info->parent_id)->find();
+				$usdt_address = $group_infos ? $group_infos->usdt : '';
+			}
+
 			$data = [
 				'chat_id' => $chatId,
 				'text' => "唯一转账地址:
@@ -284,6 +282,8 @@ class BotGetMessageService
 				$this->sendForwardTextMessage($data);
 				exit;
 			}
+			$parent_id = $model->type == 1 ? '' : $model->parent_id;
+			$type = $model->type;
 
 			$model = new BotGroup();
 			$group = $model->where('business_id', $dl)->find();
@@ -306,11 +306,13 @@ class BotGetMessageService
 				$this->sendForwardTextMessage($data);
 				exit;
 			}
+
+
 			$model->name = $username;
 			$model->chat_id = $chatId;
-			$model->type = 2;
+			$model->type = $type;
 			$model->business_id = $dl;
-			$model->parent_id = 30318;
+			$model->parent_id = $parent_id;
 			$model->status = 1;
 			$data = [
 				'chat_id' => $chatId,
@@ -349,7 +351,7 @@ class BotGetMessageService
 			exit;
 		}
 
-		if ($text == 'qf' || $text == 'qfdl' || $text == 'qfsh')
+		if ($text == 'qf' || $text == 'qfgzs' || $text == 'qfsh')
 		{
 			if (!isset($this->message_data['message']['reply_to_message']))
 			{
@@ -364,17 +366,24 @@ class BotGetMessageService
 				$send_message = "当前群里不可群发消息请前往商户群发送";
 				self::sendMessage($chatId, $send_message);
 			}
-
 			$where = [];
 			$where[] = ['id', '<>', $group_info['id']];
+			if ($group_info['type'] == 1)
+			{
+				$where[] = ['parent_id', '=', $group_info['business_id']];
+			}
+			else
+			{
+				$where[] = ['parent_id', '=', $group_info['parent_id']];
+			}
 			//四方群
-			if ($text == 'qfdl')
+			if ($text == 'qfgzs')
 			{        //工作室群
-				$type = 3;
+				$type = 2;
 			}
 			elseif ($text == 'qfsh')
 			{   //商户群
-				$type = 2;
+				$type = 3;
 			}
 			else
 			{
@@ -384,12 +393,14 @@ class BotGetMessageService
 			{
 				$where[] = ['type', '=', $type];
 			}
-			$group_list = $bot_group_model->where($where)->select();
+			$group_list = $bot_group_model->where($where)->select()->toArray();
+
 			if (!$group_list)
 			{
 				$send_message = "无群聊可群发!";
 				self::sendMessage($chatId, $send_message);
 			}
+
 			$reply = $this->message_data['message']['reply_to_message'];
 
 			$reply_text = isset($reply['caption']) ? $reply['caption'] : (isset($reply['text']) ? $reply['text'] : '');
@@ -435,7 +446,6 @@ class BotGetMessageService
 
 		if ($text == 'kqtz')
 		{
-			$busuness_id = substr($text, 5);
 			$group = BotGroup::where('chat_id', $chatId)->find();
 			if (!$group)
 			{
@@ -446,9 +456,16 @@ class BotGetMessageService
 				];
 				$this->sendForwardTextMessage($data);
 			}
-			$global_redis = \app\extend\common\Common::global_redis();
-			$key = 'money_negative_warning_open' . $group['business_id'];
-			$global_redis->set($key, 1);
+			$group->quota_status = 1;
+			if (!$group->save())
+			{
+				$data = [
+					'chat_id' => $chatId,
+					'text' => "开启失败",
+					'reply_to_message_id' => $this->message_data['message']['message_id']
+				];
+				$this->sendForwardTextMessage($data);
+			}
 			$data = [
 				'chat_id' => $chatId,
 				'text' => "开启成功",
@@ -469,9 +486,17 @@ class BotGetMessageService
 				];
 				$this->sendForwardTextMessage($data);
 			}
-			$global_redis = \app\extend\common\Common::global_redis();
-			$key = 'money_negative_warning_open' . $group['business_id'];
-			$global_redis->set($key, 2);
+			$group->quota_status = -1;
+			if (!$group->save())
+			{
+				$data = [
+					'chat_id' => $chatId,
+					'text' => "关闭失败",
+					'reply_to_message_id' => $this->message_data['message']['message_id']
+				];
+				$this->sendForwardTextMessage($data);
+			}
+
 			$data = [
 				'chat_id' => $chatId,
 				'text' => "关闭成功",
@@ -493,9 +518,7 @@ class BotGetMessageService
 				];
 				$this->sendForwardTextMessage($data);
 			}
-			$global_redis = \app\extend\common\Common::global_redis();
-			$key = 'money_negative_warning_open' . $group['business_id'];
-			$check = $global_redis->get($key) == 2 ? '关闭' : '开启';
+			$check = $group->quota_status == -1 ? '关闭' : '开启';
 			$data = [
 				'chat_id' => $chatId,
 				'text' => "当前商户群通知状态为：" . $check,
@@ -635,11 +658,11 @@ class BotGetMessageService
 			];
 			$this->sendForwardTextMessageTwo($data);
 			$model = Business::where('id', $business['business_id'])->find();
-			if ((int) $result['last_quota'] < 5000)
+			if ($business['quota_status'] == 1 && (int) $result['last_quota'] < $business['quota'])
 			{
 				$data = [
 					'chat_id' => $chatId,
-					'text' => "尊敬的【" . $model->realname . "】vip客户\n您现在的可用余额【" . $result['last_quota'] . "】\n已经低于【5000】\n为了不影响您的正常代付,请尽快充值!",
+					'text' => "尊敬的【" . $model->realname . "】vip客户\n您现在的可用余额【" . $result['last_quota'] . "】\n已经低于【" . $business['quota'] . "】\n为了不影响您的正常代付,请尽快充值!",
 					// 	'reply_to_message_id' => $this->message_data['message']['message_id']
 				];
 				$this->sendForwardTextMessage($data);
@@ -843,11 +866,11 @@ class BotGetMessageService
 			}
 			$this->sendForwardTextMessageTwo($data);
 
-			if ((int) $model->allow_withdraw < 5000)
+			if ($business->quota_status == 1 && (int) $model->allow_withdraw < $business->quota)
 			{
 				$data = [
 					'chat_id' => $chatId,
-					'text' => "尊敬的【" . $model->realname . "】vip客户\n您现在的可用余额【" . $model->allow_withdraw . "】\n已经低于【5000】\n为了不影响您的正常代付,请尽快充值!",
+					'text' => "尊敬的【" . $model->realname . "】vip客户\n您现在的可用余额【" . $model->allow_withdraw . "】\n已经低于【" . $business->quota . "】\n为了不影响您的正常代付,请尽快充值!",
 					// 	'reply_to_message_id' => $this->message_data['message']['message_id']
 				];
 				$this->sendForwardTextMessage($data);
