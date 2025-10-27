@@ -357,6 +357,7 @@ class ChannelDingxintongController extends AuthController
 		$data['key_secret'] = $model->key_secret;
 		$data['balance'] = $model->balance;
 		$data['remark'] = $model->remark;
+		$data['order_num'] = $model->order_num;
 		$data['status'] = $model->status;
 
 		$data['channel_id'] = $model->channel_id;
@@ -378,6 +379,7 @@ class ChannelDingxintongController extends AuthController
 			'key_id|密钥ID' => 'require|alphaNum|max:50',
 			'key_secret|密钥' => 'require|max:255',
 			'remark|备注' => 'max:50',
+			'order_num|并发数量' => 'require|integer|>=:1|<=:10000',
 			'status|状态' => 'require|integer',
 		];
 
@@ -428,6 +430,7 @@ class ChannelDingxintongController extends AuthController
 		$model->key_id = input('post.key_id');
 		$model->key_secret = input('post.key_secret');
 		$model->remark = input('post.remark');
+		$model->order_num = input('post.order_num');
 		$model->status = intval(input('post.status'));
 		$model->card_business_id = intval(input('post.card_business_id'));
 
